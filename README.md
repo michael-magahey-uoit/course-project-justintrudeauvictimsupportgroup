@@ -8,7 +8,7 @@ Group members (3-5) (no Student IDs, only names and github usernames):
 
 3. Andrew Clegg (Andrew-Clegg)
 
-4. 
+4. Ethan Randle-Bragg (EthanRandle)
 
 5.
 
