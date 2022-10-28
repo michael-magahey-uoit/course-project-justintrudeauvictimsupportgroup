@@ -6,7 +6,7 @@ Group members (3-5) (no Student IDs, only names and github usernames):
 
 2. Haaris Bin Ahmed (HaarisAhmed2001)
 
-3. 
+3. Andrew Clegg (Andrew-Clegg)
 
 4. 
 
