@@ -4,7 +4,7 @@ Group members (3-5) (no Student IDs, only names and github usernames):
 
 1. Michael Magahey (michael-magahey-uoit)
 
-2. 
+2. Haaris Bin Ahmed (HaarisAhmed2001)
 
 3. 
 
