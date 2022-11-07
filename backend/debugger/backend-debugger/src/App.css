@@ -36,3 +36,52 @@
     transform: rotate(360deg);
   }
 }
+
+.upArrow {
+  margin: 5%;
+  width: 0;
+  height: 0;
+  border-left: 30px solid transparent;
+  border-right: 30px solid transparent;
+  border-bottom: 30px solid black;
+  display: block;
+}
+
+.leftArrow {
+  margin: 5%;
+  width: 0;
+  height: 0;
+  border-top: 30px solid transparent;
+  border-bottom: 30px solid transparent;
+  border-right: 30px solid black;
+  display: inline-block;
+}
+
+.rightArrow {
+  margin: 5%;
+  width: 0;
+  height: 0;
+  border-top: 30px solid transparent;
+  border-bottom: 30px solid transparent;
+  border-left: 30px solid black;
+  display: inline-block;
+}
+
+.downArrow {
+  margin: 5%;
+  width: 0;
+  height: 0;
+  border-left: 30px solid transparent;
+  border-right: 30px solid transparent;
+  border-top: 30px solid black;
+  display: block;
+}
+
+.dropButton {
+  margin: 5%;
+  display: block;
+  border-radius: 50%;
+  background-color: black;
+  height: 50px;
+  width: 50px;
+}
