@@ -24,6 +24,20 @@ function clear() {
     DROP.writeSync(0);
 }
 
+function getip() {
+    return new Promise((resolve, reject) => {
+        const timer = setTimeout(() => {
+            return { address: undefined, error: 'IP connection timed out!' };
+        }, 3000);
+        http.get({'host': 'api.ipify.org', 'port': 80, 'path': '/'}, function (res) {
+            res.on('data', function(ip) {
+                clearTimeout(timer);
+                return { address: ip };
+            });
+        });
+    });
+}
+
 //Global placeholders to allow us to bypass some weird threading tactics
 let queue = [];
 let player = undefined;
@@ -36,6 +50,8 @@ const cors = require('cors');
 const firebase = require('firebase-admin');
 const app = express()
 const https = require('https');
+const http = require('http'); //http is only for outbound api calls and should NEVER handle any client server data
+const { callbackify } = require('util');
 
 //perpare app to handle incoming data
 app.use(bodyParser.json());
@@ -62,8 +78,28 @@ app.get('/', async function (req, res) {
     res.end();
 });
 
+//get queue and current player
 app.get('/queue', async function(req, res) {
     res.send(JSON.stringify({ list: queue, current: player }));
+    res.end();
+});
+
+//report player info
+app.post('/play', async function (req, res) {
+    let params = req.body.params;
+    res.send("");
+    res.end();
+});
+
+//get play statistics
+app.get('/statistics', async function (req, res) {
+    res.send(JSON.stringify({}));
+    res.end();
+});
+
+//get claw location (note that client side webserver ip is unreliable due to webproxy)
+app.get('/location', async function (req, res) {
+    res.send(await getip());
     res.end();
 });
 
