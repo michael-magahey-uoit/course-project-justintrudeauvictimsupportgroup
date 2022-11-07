@@ -15,8 +15,17 @@ function sleep(ms) {
     });
 }
 
+//Fast clear of inputs to clean up after a game
+function clear() {
+    UP.writeSync(0);
+    DOWN.writeSync(0);
+    LEFT.writeSync(0);
+    RIGHT.writeSync(0);
+    DROP.writeSync(0);
+}
+
 //Global placeholders to allow us to bypass some weird threading tactics
-let order = [];
+let queue = [];
 let player = undefined;
 
 //Here we start adding web functionality
@@ -38,7 +47,7 @@ const server = https.createServer({
     cert: undefined
 }, app);
 //create websocket endpoint on the server
-const wss = require('socket.io').listen(app);
+const wss = require('socket.io').listen(app, { cors: { origin: '*' }});
 
 //generic post handler
 app.post('/', async function (req, res) {
@@ -53,10 +62,57 @@ app.get('/', async function (req, res) {
     res.end();
 });
 
+app.get('/queue', async function(req, res) {
+    res.send(JSON.stringify({ list: queue, current: player }));
+    res.end();
+});
+
 //websocket client handler
 wss.on('connection', async (ws) => {
-    const id = ws.id;
-    ws.send("");
+    queue.push(ws.id);
+    while (queue[0] != ws.id)
+    {
+        wss.emit("queue", JSON.stringify({ status: queue, current: player }));
+        await sleep(1000);
+    }
+    player = ws.id;
+    ws.on('clear', () => {
+        clear();
+    });
+    ws.on('up', () => {
+        UP.writeSync(1);
+    });
+    ws.on('down', () => {
+        DOWN.writeSync(1);
+    });
+    ws.on('left', () => {
+        LEFT.writeSync(1);
+    });
+    ws.on('right', () => {
+        RIGHT.writeSync(1);
+    });
+    ws.on('drop', async () => {
+        DROP.writeSync(1);
+        await sleep(1000);
+        DROP.writeSync(0);
+        ws.close();
+        queue.splice(0, 1);
+    });
+    ws.on('disconnect', async () => {
+        if (ws.id == player)
+        {
+            DROP.writeSync(1);
+            await sleep(1000);
+            DROP.writeSync(0);
+            clear();
+            queue.splice(0, 1);
+        }
+        else
+        {
+            queue.splice(queue.indexOf(ws.id), 1);
+        }
+    });
+    ws.emit('status', "play");
 });
 
 app.listen(9110); //Start webserver on port
