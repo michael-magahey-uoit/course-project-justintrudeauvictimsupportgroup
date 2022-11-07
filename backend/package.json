@@ -1,0 +1,21 @@
+{
+  "name": "controller",
+  "version": "1.0.0",
+  "description": "the main webserver that allows for remote control of the claw machine",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michael Magahey",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "firebase-admin": "^11.2.0",
+    "https": "^1.0.0",
+    "onoff": "^6.0.3",
+    "socket.io": "^4.5.3",
+    "uuid": "^9.0.0"
+  }
+}
