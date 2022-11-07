@@ -7,6 +7,7 @@ let DOWN = new gpio(5, 'out');
 let LEFT = new gpio(6, 'out');
 let RIGHT = new gpio(7, 'out');
 let DROP = new gpio(8, 'out');
+console.log(`GPIO Setup Complete!`);
 
 //Simple force sleep function
 function sleep(ms) {
@@ -41,17 +42,17 @@ function getip() {
 //Global placeholders to allow us to bypass some weird threading tactics
 let queue = [];
 let player = undefined;
+console.log(`Globals Declared! Beginning Web Initialization...`);
 
 //Here we start adding web functionality
 const express = require('express');
 const bodyParser = require('body-parser');
 const uuid = require('uuid');
 const cors = require('cors');
-const firebase = require('firebase-admin');
+//const firebase = require('firebase-admin');
 const app = express()
 const https = require('https');
 const http = require('http'); //http is only for outbound api calls and should NEVER handle any client server data
-const { callbackify } = require('util');
 
 //perpare app to handle incoming data
 app.use(bodyParser.json());
@@ -62,8 +63,6 @@ const server = https.createServer({
     ca: undefined,
     cert: undefined
 }, app);
-//create websocket endpoint on the server
-const wss = require('socket.io').listen(app, { cors: { origin: '*' }});
 
 //generic post handler
 app.post('/', async function (req, res) {
@@ -101,6 +100,14 @@ app.get('/statistics', async function (req, res) {
 app.get('/location', async function (req, res) {
     res.send(await getip());
     res.end();
+});
+console.log(`Web API Initalization Done! Beginning Websocket Initalization...`);
+
+//create websocket endpoint on the server
+const wss = require('socket.io')(server, {
+    cors: {
+        origin: "*",
+    }
 });
 
 //websocket client handler
@@ -152,4 +159,6 @@ wss.on('connection', async (ws) => {
 });
 
 app.listen(9110); //Start webserver on port
+
+console.log(`Websocket Initialization Done! Webserver started on port 9110!`);
 
