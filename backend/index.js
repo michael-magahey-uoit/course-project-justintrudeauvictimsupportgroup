@@ -113,12 +113,14 @@ const wss = require('socket.io')(server, {
 //websocket client handler
 wss.on('connection', async (ws) => {
     queue.push(ws.id);
+    console.log(`[${ws.id}] - New Client ${ws.id}!`);
     while (queue[0] != ws.id)
     {
         wss.emit("queue", JSON.stringify({ status: queue, current: player }));
         await sleep(1000);
     }
     player = ws.id;
+    console.log(`[${ws.id}] - Now Playing!`);
     ws.on('clear', () => {
         clear();
     });
@@ -136,6 +138,7 @@ wss.on('connection', async (ws) => {
     });
     ws.on('drop', async () => {
         DROP.writeSync(1);
+        console.log(`[${ws.id}] - Dropped Claw! Game Over!`);
         await sleep(1000);
         DROP.writeSync(0);
         ws.close();
@@ -145,6 +148,7 @@ wss.on('connection', async (ws) => {
         if (ws.id == player)
         {
             DROP.writeSync(1);
+            console.log(`[${ws.id}] - Player Disconnected! Dropping Claw...`);
             await sleep(1000);
             DROP.writeSync(0);
             clear();
@@ -152,6 +156,7 @@ wss.on('connection', async (ws) => {
         }
         else
         {
+            console.log(`[${ws.id}] - Player Disconnected!`);
             queue.splice(queue.indexOf(ws.id), 1);
         }
     });
