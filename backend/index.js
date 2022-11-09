@@ -59,10 +59,14 @@ const http = require('http'); //http is only for outbound api calls and should N
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 //create server with https certificates
+/*
 const server = https.createServer({
     key: fs.readFileSync(__dirname + '/SSL/private.key', 'utf8'),
     cert: fs.readFileSync(__dirname + '/SSL/certificate.crt', 'utf8')
 }, app);
+*/
+
+const insecure_server = http.createServer(app);
 
 //generic post handler
 app.post('/', async function (req, res) {
@@ -104,14 +108,76 @@ app.get('/location', async function (req, res) {
 console.log(`Web API Initalization Done! Beginning Websocket Initalization...`);
 
 //create websocket endpoint on the server
+/*
 const wss = require('socket.io')(server, {
+    cors: {
+        origin: "*",
+    }
+});
+*/
+
+const insecure_wss = require('socket.io')(insecure_server, {
     cors: {
         origin: "*",
     }
 });
 
 //websocket client handler
+/*
 wss.on('connection', async (ws) => {
+    queue.push(ws.id);
+    console.log(`[${ws.id}] - New Client ${ws.id}!`);
+    while (queue[0] != ws.id)
+    {
+        wss.emit("queue", JSON.stringify({ status: queue, current: player }));
+        await sleep(1000);
+    }
+    player = ws.id;
+    console.log(`[${ws.id}] - Now Playing!`);
+    ws.on('clear', () => {
+        clear();
+    });
+    ws.on('up', () => {
+        UP.writeSync(1);
+    });
+    ws.on('down', () => {
+        DOWN.writeSync(1);
+    });
+    ws.on('left', () => {
+        LEFT.writeSync(1);
+    });
+    ws.on('right', () => {
+        RIGHT.writeSync(1);
+    });
+    ws.on('drop', async () => {
+        DROP.writeSync(1);
+        console.log(`[${ws.id}] - Dropped Claw! Game Over!`);
+        await sleep(1000);
+        DROP.writeSync(0);
+        ws.close();
+        queue.splice(0, 1);
+    });
+    ws.on('disconnect', async () => {
+        if (ws.id == player)
+        {
+            DROP.writeSync(1);
+            console.log(`[${ws.id}] - Player Disconnected! Dropping Claw...`);
+            await sleep(1000);
+            DROP.writeSync(0);
+            clear();
+            queue.splice(0, 1);
+        }
+        else
+        {
+            console.log(`[${ws.id}] - Player Disconnected!`);
+            queue.splice(queue.indexOf(ws.id), 1);
+        }
+    });
+    ws.emit('status', "play");
+});
+*/
+
+insecure_wss.on('connection', async (ws) => {
     queue.push(ws.id);
     console.log(`[${ws.id}] - New Client ${ws.id}!`);
     while (queue[0] != ws.id)
