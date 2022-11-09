@@ -54,32 +54,16 @@ const fs = require('fs');
 const app = express()
 const https = require('https');
 const http = require('http'); //http is only for outbound api calls and should NEVER handle any client server data
+const credentials = { key: fs.readFileSync('./SSL/backend.key', 'utf8'), cert: fs.readFileSync('./SSL/backend.crt', 'utf8') }
+
 
 //perpare app to handle incoming data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 //create server with https certificates
-/*
-const server = https.createServer({
-    key: fs.readFileSync(__dirname + '/SSL/private.key', 'utf8'),
-    cert: fs.readFileSync(__dirname + '/SSL/certificate.crt', 'utf8')
-}, app);
-*/
-
+const server = https.createServer(credentials, app);
 const insecure_server = http.createServer(app);
-
-//generic post handler
-app.post('/', async function (req, res) {
-    let params = req.body.params;
-    res.send("");
-    res.end();
-});
-
-//generic get handler
-app.get('/', async function (req, res) {
-    res.send("");
-    res.end();
-});
 
 //get queue and current player
 app.get('/queue', async function(req, res) {
@@ -108,13 +92,11 @@ app.get('/location', async function (req, res) {
 console.log(`Web API Initalization Done! Beginning Websocket Initalization...`);
 
 //create websocket endpoint on the server
-/*
 const wss = require('socket.io')(server, {
     cors: {
         origin: "*",
     }
 });
-*/
 
 const insecure_wss = require('socket.io')(insecure_server, {
     cors: {
@@ -123,7 +105,6 @@ const insecure_wss = require('socket.io')(insecure_server, {
 });
 
 //websocket client handler
-/*
 wss.on('connection', async (ws) => {
     queue.push(ws.id);
     console.log(`[${ws.id}] - New Client ${ws.id}!`);
@@ -175,7 +156,6 @@ wss.on('connection', async (ws) => {
     });
     ws.emit('status', "play");
 });
-*/
 
 insecure_wss.on('connection', async (ws) => {
     queue.push(ws.id);
@@ -229,7 +209,8 @@ insecure_wss.on('connection', async (ws) => {
     ws.emit('status', "play");
 });
 
-app.listen(9110); //Start webserver on port
+server.listen(9110); //Start webserver on port
+insecure_server.listen(9111);
 
-console.log(`Websocket Initialization Done! Webserver started on port 9110!`);
+console.log(`Websocket Initialization Done! Webserver started on port 9110/9111!`);
 
