@@ -5,7 +5,7 @@ import io from 'socket.io-client';
 function App() {
   const [socket, setSocket] = useState(null);
   useEffect(() => {
-    const connection = io(`https://127.0.0.1:9110`);
+    const connection = io(`https://10.102.61.3:9110`);
     connection.on('status', (details) => {
       alert(details);
     });

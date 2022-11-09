@@ -49,6 +49,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const uuid = require('uuid');
 const cors = require('cors');
+const fs = require('fs');
 //const firebase = require('firebase-admin');
 const app = express()
 const https = require('https');
@@ -59,9 +60,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 //create server with https certificates
 const server = https.createServer({
-    key: undefined,
-    ca: undefined,
-    cert: undefined
+    key: fs.readFileSync(__dirname + '/SSL/private.key', 'utf8'),
+    cert: fs.readFileSync(__dirname + '/SSL/certificate.crt', 'utf8')
 }, app);
 
 //generic post handler
