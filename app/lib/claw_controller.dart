@@ -73,6 +73,41 @@ class _ClawControllerState extends State<ClawController> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            IconButton(
+                onPressed: (){},
+                icon: const Icon(Icons.keyboard_arrow_up_rounded)
+            )
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+                onPressed: (){},
+                icon: const Icon(Icons.keyboard_arrow_left_rounded)
+            ),
+            IconButton(
+                onPressed: (){},
+                icon: const Icon(Icons.circle)
+            ),
+            IconButton(
+                onPressed: (){},
+                icon: const Icon(Icons.keyboard_arrow_right_rounded)
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+                onPressed: (){},
+                icon: const Icon(Icons.keyboard_arrow_down_rounded)
+            )
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
             Container(
               width: width/1.2,
               height: 40,
