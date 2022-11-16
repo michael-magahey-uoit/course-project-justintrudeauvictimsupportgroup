@@ -98,8 +98,8 @@ class _ClawControllerState extends State<ClawController> {
             IconButton(
                 iconSize: _buttonSize,
                 onPressed: (){
-                  _claw.drop();
-                },//_claw.drop(),
+                  _claw.drop(context);
+                },
                 icon: const Icon(Icons.circle)
             ),
             IconButton(
@@ -130,7 +130,7 @@ class _ClawControllerState extends State<ClawController> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.only(top: _height/6),
+              padding: EdgeInsets.only(top: _height/10),
               child: Container(
                 width: _width/1.2,
                 height: 40,
