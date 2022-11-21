@@ -4,26 +4,39 @@ import io from 'socket.io-client';
 
 function App() {
   const [socket, setSocket] = useState(null);
+  const [isConnected, setConnected] = useState(false);
+
   useEffect(() => {
-    const connection = io(`https://10.102.61.3:9110`);
+    const connection = io(`http://10.102.61.3`);
+    connection.on('connect', () => {
+      setSocket(connection);
+      setConnected(true);
+    });
     connection.on('status', (details) => {
       alert(details);
     });
     connection.on('queue', (details) => {
       alert(details);
     });
+    connection.on('disconnect', () => {
+      setConnected(false);
+    });
     setSocket(connection);
     return () => {
+      connection.off('connect');
+      connection.off('status');
+      connection.off('queue');
+      connection.off('disconnect');
       connection.close();
     }
-  }, [setSocket]);
+  }, []);
 
 
 
 
   return (
     <div className="App">
-      { socket ? 
+      { isConnected ? 
       (
         <>
           <div className="game">

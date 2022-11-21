@@ -2,11 +2,11 @@
 const gpio = require('onoff').Gpio;
 
 //Controller bindings to gpio pins
-let UP = new gpio(24, 'out');
+let UP = new gpio(4, 'out');
 let DOWN = new gpio(5, 'out');
-let LEFT = new gpio(27, 'out');
-let RIGHT = new gpio(25, 'out');
-let DROP = new gpio(8, 'out'); //Incorrect GPIO cause of weird network bug
+let LEFT = new gpio(6, 'out');
+let RIGHT = new gpio(7, 'out');
+let DROP = new gpio(8, 'out');
 console.log(`GPIO Setup Complete!`);
 
 //Simple force sleep function
@@ -128,19 +128,15 @@ wss.on('connection', async (ws) => {
         clear();
     });
     ws.on('up', () => {
-		console.log(`[${ws.id}] -> Up`);
         UP.writeSync(1);
     });
     ws.on('down', () => {
-		console.log(`[${ws.id}] -> Down`);
         DOWN.writeSync(1);
     });
     ws.on('left', () => {
-		console.log(`[${ws.id}] -> Left`);
         LEFT.writeSync(1);
     });
     ws.on('right', () => {
-		console.log(`[${ws.id}] -> Right`);
         RIGHT.writeSync(1);
     });
     ws.on('drop', async () => {
@@ -148,7 +144,7 @@ wss.on('connection', async (ws) => {
         console.log(`[${ws.id}] - Dropped Claw! Game Over!`);
         await sleep(1000);
         DROP.writeSync(0);
-        ws.disconnect();
+        ws.close();
         queue.splice(0, 1);
     });
     ws.on('disconnect', async () => {
@@ -184,19 +180,15 @@ insecure_wss.on('connection', async (ws) => {
         clear();
     });
     ws.on('up', () => {
-		console.log(`[${ws.id}] -> Up`);
         UP.writeSync(1);
     });
     ws.on('down', () => {
-		console.log(`[${ws.id}] -> Down`);
         DOWN.writeSync(1);
     });
     ws.on('left', () => {
-		console.log(`[${ws.id}] -> Left`);
         LEFT.writeSync(1);
     });
     ws.on('right', () => {
-		console.log(`[${ws.id}] -> Right`);
         RIGHT.writeSync(1);
     });
     ws.on('drop', async () => {
@@ -204,7 +196,7 @@ insecure_wss.on('connection', async (ws) => {
         console.log(`[${ws.id}] - Dropped Claw! Game Over!`);
         await sleep(1000);
         DROP.writeSync(0);
-        ws.disconnect();
+        ws.close();
         queue.splice(0, 1);
     });
     ws.on('disconnect', async () => {
@@ -226,8 +218,8 @@ insecure_wss.on('connection', async (ws) => {
     ws.emit('status', "play");
 });
 
-server.listen(443); //Start webserver on port
-insecure_server.listen(80);
+server.listen(9110); //Start webserver on port
+insecure_server.listen(9111);
 
-console.log(`Websocket Initialization Done! Webserver started on port 443/80!`);
+console.log(`Websocket Initialization Done! Webserver started on port 9110/9111!`);
 
