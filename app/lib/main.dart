@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'claw_controller.dart';
+import 'menu.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +16,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ClawController(title: "Claw Machine"),
+      home: MainMenu(), //ClawController(title: "Claw Machine"),
+      routes: <String, WidgetBuilder>{
+        '/playClaw': (BuildContext context){
+          return ClawController(title: "CLAWWWW",);
+        }
+      },
     );
   }
 }

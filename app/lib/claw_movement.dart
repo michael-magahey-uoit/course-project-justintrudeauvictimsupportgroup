@@ -1,8 +1,13 @@
 //TODO: add functionality
 import 'package:flutter/material.dart';
 import 'dart:io';
-
 import 'package:flutter/services.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+
+final channel = WebSocketChannel.connect(
+  Uri.parse('')
+);
 
 class ClawMovement{
   moveForward(){
@@ -23,7 +28,7 @@ class ClawMovement{
 
   drop(BuildContext context){
     print("Drop"); //Debugging, remove later
-    //TODO: add one for if they win
+    //TODO: add one for if they win and wait to find if they actually won
     showDialog(context: context,
         barrierDismissible: false,
         builder: (context){
