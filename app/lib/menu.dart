@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'frontend/stats_charts/chartpage.dart' as chart;
 
 class MainMenu extends StatefulWidget {
   const MainMenu({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class _MainMenuState extends State<MainMenu> {
     );
   }
 
-  Widget _buildMainMenu(){
+  Widget _buildMainMenu() {
     double _width = MediaQuery.of(context).size.width; //Width of device
     double _height = MediaQuery.of(context).size.height; //Height of device
     TextStyle _textSize = TextStyle(fontSize: 40);
@@ -28,13 +29,13 @@ class _MainMenuState extends State<MainMenu> {
         children: [
           //Button to bring the user to the claw machine controller
           GestureDetector(
-            onTap: (){
+            onTap: () {
               Navigator.pushNamed(context, '/playClaw');
             },
             child: Container(
               color: Colors.red,
-              width: _width/1.5,
-              height: _height/16,
+              width: _width / 1.5,
+              height: _height / 16,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
@@ -47,11 +48,11 @@ class _MainMenuState extends State<MainMenu> {
           Padding(padding: EdgeInsets.symmetric(vertical: 10)),
           //Button to bring the user to their stats
           GestureDetector(
-            onTap: (){},
+            onTap: () {},
             child: Container(
               color: Colors.yellow,
-              width: _width/1.5,
-              height: _height/16,
+              width: _width / 1.5,
+              height: _height / 16,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
@@ -64,11 +65,14 @@ class _MainMenuState extends State<MainMenu> {
           Padding(padding: EdgeInsets.symmetric(vertical: 10)),
           //Button to bring the user to global stats
           GestureDetector(
-            onTap: (){},
+            onTap: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => chart.ChartPage()));
+            },
             child: Container(
               color: Colors.blue,
-              width: _width/1.5,
-              height: _height/16,
+              width: _width / 1.5,
+              height: _height / 16,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [

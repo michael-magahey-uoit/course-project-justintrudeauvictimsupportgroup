@@ -14,7 +14,7 @@ class _ChartPageState extends State<ChartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Grade Frequency"),
+          title: Text("Global Stats"),
         ),
         body: Center(
           child: Column(
