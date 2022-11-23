@@ -1,15 +1,16 @@
-import 'package:flutter/widgets.dart'
+import 'package:flutter/widgets.dart';
 
-class  extends StatefulWidget {
-      const ({Key? key}) : super(key: key);
+class TrackerPage extends StatefulWidget {
+  const TrackerPage({Key? key}) : super(key: key);
 
-      @override
-      State<> createState() => _State();
-    }
-
-    class _State extends State<> {
-      @override
-      Widget build(BuildContext context) {
-        return Container();
-      }
+  @override
+  State<TrackerPage> createState() => _TrackerPageState();
 }
+
+class _TrackerPageState extends State<TrackerPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
