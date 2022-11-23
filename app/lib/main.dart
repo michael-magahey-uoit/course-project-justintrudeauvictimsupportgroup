@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'claw_controller.dart';
 import 'menu.dart';
+import 'my_stats.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,6 +21,9 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/playClaw': (BuildContext context){
           return ClawController(title: "CLAWWWW",);
+        },
+        '/myStats': (BuildContext context){
+          return MyStats(title: "My Stats",);
         }
       },
     );

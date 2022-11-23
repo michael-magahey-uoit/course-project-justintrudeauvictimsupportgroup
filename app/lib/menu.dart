@@ -14,7 +14,7 @@ class _MainMenuState extends State<MainMenu> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Cool app title"),
+        title: const Text("Main Menu"),
       ),
       body: _buildMainMenu(),
     );
@@ -49,7 +49,9 @@ class _MainMenuState extends State<MainMenu> {
           Padding(padding: EdgeInsets.symmetric(vertical: 10)),
           //Button to bring the user to their stats
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, '/myStats');
+            },
             child: Container(
               color: Colors.yellow,
               width: _width / 1.5,
@@ -63,7 +65,7 @@ class _MainMenuState extends State<MainMenu> {
               ),
             ),
           ),
-          Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+          const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
           //Button to bring the user to global stats
           GestureDetector(
             onTap: () {
@@ -83,7 +85,7 @@ class _MainMenuState extends State<MainMenu> {
               ),
             ),
           ),
-          Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+          const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
           //Button to bring the user to global stats
           GestureDetector(
             onTap: () {
@@ -91,7 +93,7 @@ class _MainMenuState extends State<MainMenu> {
                   MaterialPageRoute(builder: (context) => map_maker.MapPage()));
             },
             child: Container(
-              color: Color.fromARGB(120, 250, 0, 0),
+              color: const Color.fromARGB(120, 250, 0, 0),
               width: _width / 1.5,
               height: _height / 16,
               child: Row(

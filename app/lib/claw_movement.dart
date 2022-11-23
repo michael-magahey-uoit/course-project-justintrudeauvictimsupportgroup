@@ -42,9 +42,12 @@ class ClawMovement{
                   },
                   child: const Text("Yes")
               ),
+              // If user doesn't want to play again returns them
+              // to the home page
               TextButton(
                   onPressed: (){
-                    SystemNavigator.pop();
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
                   },
                   child: const Text("No")
               ),
