@@ -45,7 +45,7 @@ class _MapPageState extends State<MapPage> {
                     Marker(
                       height: 40,
                       width: 40,
-                      point: mapMarkers[0].location ?? AppConstants.myLocation,
+                      point: mapMarkers[i].location ?? AppConstants.myLocation,
                       builder: (_) {
                         return Container(
                           child: IconButton(
@@ -61,9 +61,9 @@ class _MapPageState extends State<MapPage> {
                             },
                             icon: Icon(
                               Icons.location_on,
-                              color: selectedIndex == i + 1
-                                  ? Colors.black
-                                  : Colors.pink,
+                              color: selectedIndex == i
+                                  ? Colors.pink
+                                  : Colors.grey,
                             ),
                             iconSize: 50,
                           ),

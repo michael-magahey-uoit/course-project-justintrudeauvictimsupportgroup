@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'frontend/stats_charts/chartpage.dart' as chart;
+import 'package:claw/frontend/geo_location/map_maker/map_maker.dart' as map_maker;
 
 class MainMenu extends StatefulWidget {
   const MainMenu({Key? key}) : super(key: key);
@@ -78,6 +79,26 @@ class _MainMenuState extends State<MainMenu> {
                 children: const [
                   Icon(Icons.location_city_outlined),
                   Text("Global Stats", style: TextStyle(fontSize: 40))
+                ],
+              ),
+            ),
+          ),
+          Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+          //Button to bring the user to global stats
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => map_maker.MapPage()));
+            },
+            child: Container(
+              color: Color.fromARGB(120, 250, 0, 0),
+              width: _width / 1.5,
+              height: _height / 16,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.location_city_outlined),
+                  Text("CM Location", style: TextStyle(fontSize: 40))
                 ],
               ),
             ),
