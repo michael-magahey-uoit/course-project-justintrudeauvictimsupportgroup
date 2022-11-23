@@ -2,8 +2,10 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 final channel = WebSocketChannel.connect(
   Uri.parse('')
@@ -12,6 +14,14 @@ final channel = WebSocketChannel.connect(
 class ClawMovement{
   moveForward(){
     print("Foward"); //Debugging, remove later
+
+    IO.Socket socket = IO.io('http://localhost:443',
+        OptionBuilder()
+            .setTransports(['websocket']).build());
+
+    socket.onConnect((_) {
+      print('aaaaaaaaaaaaah');
+    });
   }
 
   moveBackwards(){

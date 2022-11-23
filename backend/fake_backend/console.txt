@@ -1,0 +1,52 @@
+Performing hot restart...
+Syncing files to device sdk gphone x86...
+Restarted application in 3,840ms.
+I/PlatformViewsController(14368): Using hybrid composition for platform view: 0
+W/om.example.cla(14368): Reducing the number of considered missed Gc histogram windows from 140 to 100
+I/flutter (14368): Foward
+I/om.example.cla(14368): NativeAlloc concurrent copying GC freed 27765(1176KB) AllocSpace objects, 0(0B) LOS objects, 49% free, 3471KB/6942KB, paused 1.465ms total 262.479ms
+I/om.example.cla(14368): NativeAlloc concurrent copying GC freed 300(50KB) AllocSpace objects, 0(0B) LOS objects, 49% free, 3486KB/6972KB, paused 8.063ms total 106.837ms
+I/om.example.cla(14368): NativeAlloc concurrent copying GC freed 495(124KB) AllocSpace objects, 18(788KB) LOS objects, 49% free, 3489KB/6979KB, paused 3.990ms total 110.729ms
+I/om.example.cla(14368): NativeAlloc concurrent copying GC freed 476(80KB) AllocSpace objects, 0(0B) LOS objects, 49% free, 3425KB/6851KB, paused 1.849ms total 179.935ms
+I/om.example.cla(14368): NativeAlloc concurrent copying GC freed 729(95KB) AllocSpace objects, 40(1740KB) LOS objects, 49% free, 3425KB/6851KB, paused 5.559ms total 145.318ms
+I/om.example.cla(14368): NativeAlloc concurrent copying GC freed 385(31KB) AllocSpace objects, 0(0B) LOS objects, 49% free, 3425KB/6850KB, paused 4.055ms total 109.629ms
+E/chromium(14368): [ERROR:web_contents_delegate.cc(218)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+E/chromium(14368): [ERROR:web_contents_delegate.cc(218)] WebContentsDelegate::CheckMediaAccessPermission: Not supported.
+W/cr_media(14368): Requires MODIFY_AUDIO_SETTINGS and RECORD_AUDIO. No audio device will be available for recording
+I/om.example.cla(14368): NativeAlloc concurrent copying GC freed 682(92KB) AllocSpace objects, 0(0B) LOS objects, 49% free, 3476KB/6953KB, paused 2.435ms total 145.455ms
+I/om.example.cla(14368): NativeAlloc concurrent copying GC freed 794(114KB) AllocSpace objects, 0(0B) LOS objects, 49% free, 3427KB/6854KB, paused 2.336ms total 116.078ms
+I/om.example.cla(14368): NativeAlloc concurrent copying GC freed 673(110KB) AllocSpace objects, 0(0B) LOS objects, 49% free, 3492KB/6985KB, paused 1.802ms total 164.437ms
+I/om.example.cla(14368): NativeAlloc concurrent copying GC freed 574(127KB) AllocSpace objects, 0(0B) LOS objects, 49% free, 3429KB/6859KB, paused 4.402ms total 178.754ms
+I/om.example.cla(14368): NativeAlloc concurrent copying GC freed 317(35KB) AllocSpace objects, 0(0B) LOS objects, 49% free, 3426KB/6853KB, paused 3.794ms total 100.173ms
+I/om.example.cla(14368): NativeAlloc concurrent copying GC freed 4646(276KB) AllocSpace objects, 0(0B) LOS objects, 49% free, 3438KB/6877KB, paused 19.059ms total 413.805ms
+I/om.example.cla(14368): NativeAlloc concurrent copying GC freed 790(71KB) AllocSpace objects, 0(0B) LOS objects, 49% free, 3464KB/6928KB, paused 3.397ms total 105.045ms
+E/Surface (14368): getSlotFromBufferLocked: unknown buffer: 0xecdf7810
+D/om.example.cla(14368): PlayerBase::PlayerBase()
+D/om.example.cla(14368): TrackPlayerBase::TrackPlayerBase()
+I/libOpenSLES(14368): Emulating old channel mask behavior (ignoring positional mask 0x3, using default mask 0x3 based on channel count of 2)
+W/chromium(14368): [WARNING:sync_reader.cc(170)] ASR: No room in socket buffer.: Broken pipe (32)
+I/cr_MediaCodecBridge(14368): create MediaCodec video decoder, mime video/x-vnd.on2.vp9
+D/om.example.cla(14368): PlayerBase::stop() from IPlayer
+D/AudioTrack(14368): stop(20): called with 3908 frames delivered
+I/OMXClient(14368): IOmx service obtained
+I/MediaCodec(14368): MediaCodec will operate in async mode
+D/SurfaceUtils(14368): connecting to surface 0xab9979e8, reason connectToSurface
+I/MediaCodec(14368): [OMX.android.goldfish.vp9.decoder] setting surface generation to 14712837
+D/SurfaceUtils(14368): disconnecting from surface 0xab9979e8, reason connectToSurface(reconnect)
+D/SurfaceUtils(14368): connecting to surface 0xab9979e8, reason connectToSurface(reconnect)
+E/ACodec  (14368): [OMX.android.goldfish.vp9.decoder] setPortMode on output to DynamicANWBuffer failed w/ err -1010
+E/chromium(14368): [ERROR:aw_browser_terminator.cc(125)] Renderer process (15118) crash detected (code -1).
+D/SurfaceUtils(14368): disconnecting from surface 0xab9979e8, reason setNativeWindowSizeFormatAndUsage
+D/SurfaceUtils(14368): connecting to surface 0xab9979e8, reason setNativeWindowSizeFormatAndUsage
+D/SurfaceUtils(14368): set up nativeWindow 0xab9979e8 for 854x480, color 0x13, rotation 0, usage 0x1002900
+W/cr_MediaCodecBridge(14368): Releasing: OMX.android.goldfish.vp9.decoder
+D/SurfaceUtils(14368): connecting to surface 0xe7b1f7d8, reason connectToSurface
+I/MediaCodec(14368): [OMX.android.goldfish.vp9.decoder] setting surface generation to 14712838
+D/SurfaceUtils(14368): disconnecting from surface 0xe7b1f7d8, reason connectToSurface(reconnect)
+D/SurfaceUtils(14368): connecting to surface 0xe7b1f7d8, reason connectToSurface(reconnect)
+D/SurfaceUtils(14368): disconnecting from surface 0xe7b1f7d8, reason setNativeWindowSizeFormatAndUsage
+D/SurfaceUtils(14368): connecting to surface 0xe7b1f7d8, reason setNativeWindowSizeFormatAndUsage
+D/SurfaceUtils(14368): set up nativeWindow 0xe7b1f7d8 for 854x480, color 0x13, rotation 0, usage 0x1002900
+D/SurfaceUtils(14368): disconnecting from surface 0xab9979e8, reason disconnectFromSurface
+W/cr_MediaCodecBridge(14368): Codec released
+D/SurfaceUtils(14368): disconnecting from surface 0xe7b1f7d8, reason disconnectFromSurface
