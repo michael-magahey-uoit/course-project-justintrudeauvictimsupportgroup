@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'frontend/stats_charts/chartpage.dart' as chart;
-import 'package:claw/frontend/geo_location/map_maker/map_maker.dart' as map_maker;
+import 'frontend/stats_charts/chartmenu.dart' as chart;
+import 'package:claw/frontend/geo_location/map_maker/map_maker.dart'
+    as map_maker;
 
 class MainMenu extends StatefulWidget {
   const MainMenu({Key? key}) : super(key: key);
@@ -70,7 +71,7 @@ class _MainMenuState extends State<MainMenu> {
           GestureDetector(
             onTap: () {
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => chart.ChartPage()));
+                  MaterialPageRoute(builder: (context) => chart.ChartMenu()));
             },
             child: Container(
               color: Colors.blue,
