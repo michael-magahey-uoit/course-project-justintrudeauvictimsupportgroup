@@ -22,11 +22,15 @@ class _MyStatsState extends State<MyStats> {
 
   Widget _buildStatsTable(){
     return Container();
-    // return PaginatedDataTable(
+    // return SingleChildScrollView(
+    //   scrollDirection: Axis.vertical,
+    //   child: DataTable(
     //     columns: const [
-    //       DataColumn(label: Text("Date"))
+    //       DataColumn(label: Text("Date")),
+    //       DataColumn(label: Text(""))
     //     ],
-    //     source: source
+    //     rows: [],
+    //   ),
     // );
   }
 }

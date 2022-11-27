@@ -120,14 +120,19 @@ class _ClawControllerState extends State<ClawController> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            IconButton(
-              iconSize: _buttonSize,
-                padding: EdgeInsets.only(bottom: _buttonPadding),
-                onPressed: (){
-                  connection!.emit('up', "");
-                },
-                icon: const Icon(Icons.keyboard_arrow_up_rounded)
+            GestureDetector(
+              onTapDown: _claw.moveRight(),
+              onTapUp: _claw.moveBackwards(),
+              child: Icon(Icons.keyboard_arrow_up_rounded, size: _buttonSize),
             )
+            // IconButton(
+            //   iconSize: _buttonSize,
+            //     padding: EdgeInsets.only(bottom: _buttonPadding),
+            //     onPressed: (){
+            //       connection!.emit('up', "");
+            //     },
+            //     icon: const Icon(Icons.keyboard_arrow_up_rounded)
+            // )
           ],
         ),
         Row(
