@@ -43,7 +43,7 @@ dependencies:
   web_socket_channel: ^2.2.0
   line_chart: ^1.0.9
   pie_chart: ^5.3.2
-  socket_io_client: ^2.0.0
+  socket_io_client: ^2.0.0-beta.2
 
 
 dev_dependencies:

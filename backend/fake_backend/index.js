@@ -91,14 +91,14 @@ wss.on('connection', async (socket) => {
 });
 
 ws.on('connection', async (socket) => {
-    queue.push(ws.id);
-    console.log(`[${ws.id}] - New Client ${ws.id}!`);
-    while (queue[0] != ws.id)
+    queue.push(socket.id);
+    console.log(`[${socket.id}] - New Client ${socket.id}!`);
+    while (queue[0] != socket.id)
     {
         wss.emit('queue', JSON.stringify({ status: queue, current: player }));
         await sleep(1000);
     }
-    player = ws.id;
+    player = socket.id;
     console.log(`[${ws.id}] - Now Playing!`);
     ws.on('clear', () => {
         console.log(`[DBG] - Controls Cleared {${player}}`);
@@ -117,6 +117,9 @@ ws.on('connection', async (socket) => {
     });
     ws.on('drop', () => {
         console.log(`[DBG] - Control DROP {${player}}`);
+    });
+    ws.on('dbg', (message) => {
+        console.log(`[DBG] - Client Packet: "${message}"`);
     });
     ws.on('disconnect', async () => {
         if (ws.id == player)

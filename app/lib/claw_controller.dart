@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socket_io_client/socket_io_client.dart';
 
 import 'claw_movement.dart';
 
@@ -18,6 +20,7 @@ class _ClawControllerState extends State<ClawController> {
 
   @override
   void initState(){
+    initSocket();
     super.initState();
 
     //TODO: Put actual url in
@@ -33,6 +36,35 @@ class _ClawControllerState extends State<ClawController> {
         isLive: true
       )
     );
+  }
+
+  initSocket() {
+    //Create connection with the backend webserver
+    IO.Socket socket = IO.io('http://10.0.2.2:80',
+      OptionBuilder()
+              .setTransports(['websocket'])
+              .build()); //Change this to internet later, 10.0.2.2 = host's localhost for emulator
+    socket.onConnect((_) {
+      print("Connected!");
+      socket.emit('dbg', "Connected!");
+    });
+    socket.onConnecting((_) {
+      print("Connecting...");
+    });
+    socket.onConnectError((err) {
+      print("Socket Error: ${err}");
+    });
+    socket.onDisconnect((_) {
+      print('Disconnected!');
+    });
+    socket.on('queue', (queue) {
+      print(queue);
+    });
+    socket.on('status', (status) {
+      print(status);
+    });
+
+    //Make a dispose function to clear the connection memory
   }
 
   @override
