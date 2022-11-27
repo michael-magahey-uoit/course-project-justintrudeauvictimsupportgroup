@@ -121,8 +121,8 @@ class _ClawControllerState extends State<ClawController> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GestureDetector(
-              onTapDown: _claw.moveRight(),
-              onTapUp: _claw.moveBackwards(),
+              onTapDown: (_) => { connection!.emit('up', "") },
+              onTapUp: (_) => { connection!.emit('clear', "") },
               child: Icon(Icons.keyboard_arrow_up_rounded, size: _buttonSize),
             )
             // IconButton(
@@ -138,42 +138,31 @@ class _ClawControllerState extends State<ClawController> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            IconButton(
-                iconSize: _buttonSize,
-                padding: EdgeInsets.only(right: _buttonPadding),
-                onPressed: () {
-                  connection!.emit('left', "");
-                },
-                icon: const Icon(Icons.keyboard_arrow_left_rounded)
+            GestureDetector(
+              onTapDown: (_) => { connection!.emit('left', "") },
+              onTapUp: (_) => { connection!.emit('clear', "") },
+              child: Icon(Icons.keyboard_arrow_left_rounded, size: _buttonSize),
             ),
-            IconButton(
-                iconSize: _buttonSize,
-                onPressed: (){
-                  connection!.emit('drop', "");
-                },
-                icon: const Icon(Icons.circle)
+            GestureDetector(
+              onTapDown: (_) => { connection!.emit('drop', "") },
+              onTapUp: (_) => { connection!.emit('clear', "") },
+              child: Icon(Icons.circle, size: _buttonSize),
             ),
-            IconButton(
-                iconSize: _buttonSize,
-                padding: EdgeInsets.only(left: _buttonPadding),
-                onPressed: (){
-                  connection!.emit('right', "");
-                },
-                icon: const Icon(Icons.keyboard_arrow_right_rounded)
+            GestureDetector(
+              onTapDown: (_) => { connection!.emit('right', "") },
+              onTapUp: (_) => { connection!.emit('clear', "") },
+              child: Icon(Icons.keyboard_arrow_right_rounded, size: _buttonSize),
             ),
           ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            IconButton(
-                iconSize: _buttonSize,
-                padding: EdgeInsets.only(top: _buttonPadding),
-                onPressed: (){
-                  connection!.emit('down', "");
-                },
-                icon: const Icon(Icons.keyboard_arrow_down_rounded)
-            )
+            GestureDetector(
+              onTapDown: (_) => { connection!.emit('down', "") },
+              onTapUp: (_) => { connection!.emit('clear', "") },
+              child: Icon(Icons.keyboard_arrow_down_rounded, size: _buttonSize),
+            ),
           ],
         ),
         //Text box that tells the user how many people are ahead of them
