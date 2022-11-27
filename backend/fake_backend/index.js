@@ -4,6 +4,7 @@ const http = require('http');
 const io = require('socket.io');
 const cors = require('cors');
 const fs = require('fs');
+const { Socket } = require('socket.io-client');
 
 const privateKey = fs.readFileSync('../SSL/backend.key', 'utf8');
 const certificate = fs.readFileSync('../SSL/backend.crt', 'utf8');
@@ -47,50 +48,6 @@ app.get('/queue', async (req, res) => {
 });
 
 wss.on('connection', async (socket) => {
-    queue.push(ws.id);
-    console.log(`[${ws.id}] - New Client ${ws.id}!`);
-    while (queue[0] != ws.id)
-    {
-        wss.emit('queue', JSON.stringify({ status: queue, current: player }));
-        await sleep(1000);
-    }
-    player = ws.id;
-    console.log(`[${ws.id}] - Now Playing!`);
-    ws.on('clear', () => {
-        console.log(`[DBG] - Controls Cleared {${player}}`);
-    });
-    ws.on('up', () => {
-        console.log(`[DBG] - Control UP {${player}}`);
-    });
-    ws.on('down', () => {
-        console.log(`[DBG] - Control DOWN {${player}}`);
-    });
-    ws.on('left', () => {
-        console.log(`[DBG] - Control LEFT {${player}}`);
-    });
-    ws.on('right', () => {
-        console.log(`[DBG] - Control RIGHT {${player}}`);
-    });
-    ws.on('drop', () => {
-        console.log(`[DBG] - Control DROP {${player}}`);
-    });
-    ws.on('disconnect', async () => {
-        if (ws.id == player)
-        {
-            console.log(`[${ws.id}] - Playing entity disconnected!, Auto drop claw here`);
-            await sleep(1000);
-            queue.splice(0, 1);
-        }
-        else
-        {
-            console.log(`[${ws.id}] - Non playing entity disconnected!`);
-            queue.splice(queue.indexOf(ws.id), 1);
-        }
-    });
-    ws.emit('status', "player");
-});
-
-ws.on('connection', async (socket) => {
     queue.push(socket.id);
     console.log(`[${socket.id}] - New Client ${socket.id}!`);
     while (queue[0] != socket.id)
@@ -99,7 +56,7 @@ ws.on('connection', async (socket) => {
         await sleep(1000);
     }
     player = socket.id;
-    console.log(`[${ws.id}] - Now Playing!`);
+    console.log(`[${socket.id}] - Now Playing!`);
     ws.on('clear', () => {
         console.log(`[DBG] - Controls Cleared {${player}}`);
     });
@@ -118,23 +75,72 @@ ws.on('connection', async (socket) => {
     ws.on('drop', () => {
         console.log(`[DBG] - Control DROP {${player}}`);
     });
-    ws.on('dbg', (message) => {
-        console.log(`[DBG] - Client Packet: "${message}"`);
-    });
     ws.on('disconnect', async () => {
-        if (ws.id == player)
+        if (socket.id == player)
         {
-            console.log(`[${ws.id}] - Playing entity disconnected!, Auto drop claw here`);
+            console.log(`[${socket.id}] - Playing entity disconnected!, Auto drop claw here`);
             await sleep(1000);
             queue.splice(0, 1);
         }
         else
         {
-            console.log(`[${ws.id}] - Non playing entity disconnected!`);
-            queue.splice(queue.indexOf(ws.id), 1);
+            console.log(`[${socket.id}] - Non playing entity disconnected!`);
+            queue.splice(queue.indexOf(socket.id), 1);
         }
     });
     ws.emit('status', "player");
+});
+
+ws.on('connection', async (socket) => {
+    queue.push(socket.id);
+    console.log(`[${socket.id}] - New Client ${socket.id}!`);
+    socket.emit('queue', JSON.stringify({ status: queue, current: player }));
+    while (queue[0] != socket.id)
+    {
+        socket.emit('queue', JSON.stringify({ status: queue, current: player }));
+        await sleep(1000);
+    }
+    player = socket.id;
+    console.log(`[${socket.id}] - Now Playing!`);
+    socket.on('clear', () => {
+        console.log(`[DBG] - Controls Cleared {${player}}`);
+    });
+    socket.on('up', () => {
+        console.log(`[DBG] - Control UP {${player}}`);
+    });
+    socket.on('down', () => {
+        console.log(`[DBG] - Control DOWN {${player}}`);
+    });
+    socket.on('left', () => {
+        console.log(`[DBG] - Control LEFT {${player}}`);
+    });
+    socket.on('right', () => {
+        console.log(`[DBG] - Control RIGHT {${player}}`);
+    });
+    socket.on('drop', async () => {
+        console.log(`[DBG] - Control DROP {${player}}`);
+        await sleep(1000);
+        socket.disconnect();
+        queue.splice(0, 1);
+        console.log(`[DBG] - Player ${socket.id} Game Over!`);
+    });
+    socket.on('dbg', (message) => {
+        console.log(`[DBG] - Client Packet: "${message}"`);
+    });
+    socket.on('disconnect', async () => {
+        if (socket.id == player)
+        {
+            console.log(`[${socket.id}] - Playing entity disconnected!, Auto drop claw here`);
+            await sleep(1000);
+            queue.splice(0, 1);
+        }
+        else
+        {
+            console.log(`[${socket.id}] - Non playing entity disconnected!`);
+            queue.splice(queue.indexOf(socket.id), 1);
+        }
+    });
+    socket.emit('status', "player");
 });
 
 server.listen(443);

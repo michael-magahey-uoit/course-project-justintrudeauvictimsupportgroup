@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:socket_io_client/socket_io_client.dart';
+import 'dart:convert';
 
 import 'claw_movement.dart';
 
@@ -16,6 +17,9 @@ class ClawController extends StatefulWidget {
 
 class _ClawControllerState extends State<ClawController> {
   late YoutubePlayerController videoPlayer;
+  List<String>? queue = null;
+  IO.Socket? connection = null;
+  bool connected = false;
   final _claw = ClawMovement();
 
   @override
@@ -45,25 +49,35 @@ class _ClawControllerState extends State<ClawController> {
               .setTransports(['websocket'])
               .build()); //Change this to internet later, 10.0.2.2 = host's localhost for emulator
     socket.onConnect((_) {
-      print("Connected!");
       socket.emit('dbg', "Connected!");
+      setState(() {
+        connected = true;
+      });
     });
     socket.onConnecting((_) {
+      connected = false;
       print("Connecting...");
     });
     socket.onConnectError((err) {
+      connected = false;
       print("Socket Error: ${err}");
     });
     socket.onDisconnect((_) {
+      connected = false;
       print('Disconnected!');
     });
     socket.on('queue', (queue) {
       print(queue);
+      Map<String, dynamic> queueData = jsonDecode(queue);
+      //String = queueData['player']
+      setState(() {
+        queue = queueData['status'];
+      });
     });
     socket.on('status', (status) {
-      print(status);
+      print("[${socket.id}] -> ${status}");
     });
-
+    connection = socket;
     //Make a dispose function to clear the connection memory
   }
 
@@ -110,7 +124,7 @@ class _ClawControllerState extends State<ClawController> {
               iconSize: _buttonSize,
                 padding: EdgeInsets.only(bottom: _buttonPadding),
                 onPressed: (){
-                  _claw.moveForward();
+                  connection!.emit('up', "");
                 },
                 icon: const Icon(Icons.keyboard_arrow_up_rounded)
             )
@@ -122,15 +136,15 @@ class _ClawControllerState extends State<ClawController> {
             IconButton(
                 iconSize: _buttonSize,
                 padding: EdgeInsets.only(right: _buttonPadding),
-                onPressed: (){
-                  _claw.moveLeft();
+                onPressed: () {
+                  connection!.emit('left', "");
                 },
                 icon: const Icon(Icons.keyboard_arrow_left_rounded)
             ),
             IconButton(
                 iconSize: _buttonSize,
                 onPressed: (){
-                  _claw.drop(context);
+                  connection!.emit('drop', "");
                 },
                 icon: const Icon(Icons.circle)
             ),
@@ -138,7 +152,7 @@ class _ClawControllerState extends State<ClawController> {
                 iconSize: _buttonSize,
                 padding: EdgeInsets.only(left: _buttonPadding),
                 onPressed: (){
-                  _claw.moveRight();
+                  connection!.emit('right', "");
                 },
                 icon: const Icon(Icons.keyboard_arrow_right_rounded)
             ),
@@ -151,7 +165,7 @@ class _ClawControllerState extends State<ClawController> {
                 iconSize: _buttonSize,
                 padding: EdgeInsets.only(top: _buttonPadding),
                 onPressed: (){
-                  _claw.moveBackwards();
+                  connection!.emit('down', "");
                 },
                 icon: const Icon(Icons.keyboard_arrow_down_rounded)
             )
@@ -170,15 +184,15 @@ class _ClawControllerState extends State<ClawController> {
                   color: Colors.blue,
                   borderRadius: BorderRadius.circular(_width/2)
                 ),
-                child: const Center(
-                  child: Text(
-                    //TODO: Replace # with number
-                      "You are # out of # players!",
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white
-                      )
-                  ),
+                child: Center(
+                  child: connected == true ? 
+                  queue != null ? 
+                        Text("You are ${queue!.indexOf(connection!.id!)} out of ${queue!.length.toString()} players!", style: TextStyle(fontSize: 20,
+                                                                            color: Colors.white)) :
+                        Text("Joining Queue...", style: TextStyle(fontSize: 20,
+                                                                  color: Colors.white)) : 
+                  Text("Disconnected!", style: TextStyle(fontSize: 20,
+                                                        color: Colors.white)),
                 )
               ),
             )
