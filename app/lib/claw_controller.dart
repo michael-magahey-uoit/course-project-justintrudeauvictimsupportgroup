@@ -44,12 +44,13 @@ class _ClawControllerState extends State<ClawController> {
 
   initSocket() {
     //Create connection with the backend webserver
-    IO.Socket socket = IO.io('http://10.0.2.2:80',
+    IO.Socket socket = IO.io('http://10.102.61.3:80',
       OptionBuilder()
               .setTransports(['websocket'])
               .build()); //Change this to internet later, 10.0.2.2 = host's localhost for emulator
     socket.onConnect((_) {
       socket.emit('dbg', "Connected!");
+      //Record Keeping Here
       setState(() {
         connected = true;
       });
@@ -76,6 +77,7 @@ class _ClawControllerState extends State<ClawController> {
     });
     socket.on('status', (status) {
       print("[${socket.id}] -> ${status}");
+      //Record Keeping Here
     });
     connection = socket;
     //Make a dispose function to clear the connection memory
