@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       home: MainMenu(), //ClawController(title: "Claw Machine"),
       routes: <String, WidgetBuilder>{
         '/playClaw': (BuildContext context){
-          return ClawController(title: "CLAWWWW",);
+          return ClawController(title: "The Claw",);
         },
         '/myStats': (BuildContext context){
           return MyStats(title: "My Stats",);

@@ -20,6 +20,7 @@ class _ClawControllerState extends State<ClawController> {
   List<String>? queue = null;
   IO.Socket? connection = null;
   bool connected = false;
+  bool playing = false;
   final _claw = ClawMovement();
 
   @override
@@ -50,7 +51,8 @@ class _ClawControllerState extends State<ClawController> {
               .build()); //Change this to internet later, 10.0.2.2 = host's localhost for emulator
     socket.onConnect((_) {
       socket.emit('dbg', "Connected!");
-      //Record Keeping Here
+      //Record Keeping Here (Cloud Storage)
+      
       setState(() {
         connected = true;
       });
@@ -77,7 +79,11 @@ class _ClawControllerState extends State<ClawController> {
     });
     socket.on('status', (status) {
       print("[${socket.id}] -> ${status}");
-      //Record Keeping Here
+      setState(() {
+        playing = true;
+      });
+      //Record Keeping Here (Local Storage)
+      //Notification Here (You are playing)
     });
     connection = socket;
     //Make a dispose function to clear the connection memory
@@ -146,7 +152,10 @@ class _ClawControllerState extends State<ClawController> {
               child: Icon(Icons.keyboard_arrow_left_rounded, size: _buttonSize),
             ),
             GestureDetector(
-              onTapDown: (_) => { connection!.emit('drop', "") },
+              onTapDown: (_) { 
+                connection!.emit('drop', "");
+                playing = false;
+              },
               onTapUp: (_) => { connection!.emit('clear', "") },
               child: Icon(Icons.circle, size: _buttonSize),
             ),
