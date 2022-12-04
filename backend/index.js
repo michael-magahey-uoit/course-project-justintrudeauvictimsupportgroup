@@ -24,21 +24,6 @@ function clear() {
     RIGHT.writeSync(0);
     DROP.writeSync(0);
 }
-
-function getip() {
-    return new Promise((resolve, reject) => {
-        const timer = setTimeout(() => {
-            return { address: undefined, error: 'IP connection timed out!' };
-        }, 3000);
-        http.get({'host': 'api.ipify.org', 'port': 80, 'path': '/'}, function (res) {
-            res.on('data', function(ip) {
-                clearTimeout(timer);
-                return { address: ip };
-            });
-        });
-    });
-}
-
 //Global placeholders to allow us to bypass some weird threading tactics
 let queue = [];
 let player = undefined;
@@ -77,26 +62,16 @@ app.get('/queue', async function(req, res) {
     res.end();
 });
 
-//report player info
-app.post('/play', async function (req, res) {
-    console.log('[!] - Player Info Requested!');
-    let params = req.body.params;
-    res.send("");
-    res.end();
-});
-
-//get play statistics
-app.get('/statistics', async function (req, res) {
-    console.log('[!] - Play Statistics Requested!');
-    res.send(JSON.stringify({}));
-    res.end();
-});
-
 //get claw location (note that client side webserver ip is unreliable due to webproxy)
-app.get('/location', async function (req, res) {
-    console.log('[!] - Claw Location Requested!');
-    res.send(await getip());
-    res.end();
+app.get('/location', async (req, res) => {
+    console.log('[!] - Location Requested!');
+    await http.get({'host': 'api.ipify.org', 'port': 80, 'path': '/'}, function (resp) {
+        resp.on('data', function(ip)
+        {
+            res.send(JSON.stringify({ ip: `${ip}` }));
+            res.end();
+        });
+    });
 });
 console.log(`Web API Initalization Done! Beginning Websocket Initalization...`);
 

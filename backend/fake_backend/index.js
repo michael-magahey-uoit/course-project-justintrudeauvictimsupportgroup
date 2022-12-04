@@ -47,6 +47,17 @@ app.get('/queue', async (req, res) => {
     res.end();
 });
 
+app.get('/location', async (req, res) => {
+    console.log('[!] - Location Requested!');
+    await http.get({'host': 'api.ipify.org', 'port': 80, 'path': '/'}, function (resp) {
+        resp.on('data', function(ip)
+        {
+            res.send(JSON.stringify({ ip: `${ip}` }));
+            res.end();
+        });
+    });
+});
+
 wss.on('connection', async (socket) => {
     queue.push(socket.id);
     console.log(`[${socket.id}] - New Client ${socket.id}!`);
