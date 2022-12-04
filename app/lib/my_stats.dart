@@ -21,16 +21,15 @@ class _MyStatsState extends State<MyStats> {
   }
 
   Widget _buildStatsTable(){
-    return Container();
-    // return SingleChildScrollView(
-    //   scrollDirection: Axis.vertical,
-    //   child: DataTable(
-    //     columns: const [
-    //       DataColumn(label: Text("Date")),
-    //       DataColumn(label: Text(""))
-    //     ],
-    //     rows: [],
-    //   ),
-    // );
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: DataTable(
+        columns: const [
+          DataColumn(label: Text("Date")),
+          DataColumn(label: Text("Play Time (s)"))
+        ],
+        rows: [],
+      ),
+    );
   }
 }

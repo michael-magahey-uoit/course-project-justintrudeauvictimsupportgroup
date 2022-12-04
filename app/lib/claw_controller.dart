@@ -24,7 +24,7 @@ class _ClawControllerState extends State<ClawController> {
   final _claw = ClawMovement();
 
   @override
-  void initState() {
+  void initState(){
     initSocket();
     super.initState();
 
@@ -35,21 +35,24 @@ class _ClawControllerState extends State<ClawController> {
     //Create the youtube player and set it to auto play
     //when loaded and give it livestream attributes
     videoPlayer = YoutubePlayerController(
-        initialVideoId: YoutubePlayer.convertUrlToId(url)!,
-        flags: const YoutubePlayerFlags(autoPlay: true, isLive: true));
+      initialVideoId: YoutubePlayer.convertUrlToId(url)!,
+      flags: const YoutubePlayerFlags(
+        autoPlay: true,
+        isLive: true
+      )
+    );
   }
 
   initSocket() {
     //Create connection with the backend webserver
-    IO.Socket socket = IO.io(
-        'http://10.102.61.3:80',
-        OptionBuilder().setTransports([
-          'websocket'
-        ]).build()); //Change this to internet later, 10.0.2.2 = host's localhost for emulator
+    IO.Socket socket = IO.io('http://10.102.61.3:80',
+      OptionBuilder()
+              .setTransports(['websocket'])
+              .build()); //Change this to internet later, 10.0.2.2 = host's localhost for emulator
     socket.onConnect((_) {
       socket.emit('dbg', "Connected!");
       //Record Keeping Here (Cloud Storage)
-
+      
       setState(() {
         connected = true;
       });
@@ -87,16 +90,18 @@ class _ClawControllerState extends State<ClawController> {
   }
 
   @override
-  Widget build(BuildContext context) => YoutubePlayerBuilder(
+  Widget build(BuildContext context) =>
+      YoutubePlayerBuilder(
         player: YoutubePlayer(
           controller: videoPlayer,
         ),
-        builder: (context, player) => Scaffold(
-          appBar: AppBar(
-            title: Text(widget.title!),
-          ),
-          body: _buildClawController(player),
-        ),
+        builder: (context, player) =>
+            Scaffold(
+              appBar: AppBar(
+                title: Text(widget.title!),
+              ),
+              body: _buildClawController(player),
+            ),
       );
 
   Widget _buildClawController(Widget player) {
@@ -113,8 +118,8 @@ class _ClawControllerState extends State<ClawController> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: _width / 1.1,
-              padding: EdgeInsets.only(top: _height / 36, bottom: _height / 7),
+              width: _width/1.1,
+              padding: EdgeInsets.only(top: _height/36, bottom: _height/7),
               child: player,
             )
           ],
@@ -124,41 +129,32 @@ class _ClawControllerState extends State<ClawController> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GestureDetector(
-              onTapDown: (_) => {connection!.emit('up', "")},
-              onTapUp: (_) => {connection!.emit('clear', "")},
+              onTapDown: (_) => { connection!.emit('up', "") },
+              onTapUp: (_) => { connection!.emit('clear', "") },
               child: Icon(Icons.keyboard_arrow_up_rounded, size: _buttonSize),
             )
-            // IconButton(
-            //   iconSize: _buttonSize,
-            //     padding: EdgeInsets.only(bottom: _buttonPadding),
-            //     onPressed: (){
-            //       connection!.emit('up', "");
-            //     },
-            //     icon: const Icon(Icons.keyboard_arrow_up_rounded)
-            // )
           ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GestureDetector(
-              onTapDown: (_) => {connection!.emit('left', "")},
-              onTapUp: (_) => {connection!.emit('clear', "")},
+              onTapDown: (_) => { connection!.emit('left', "") },
+              onTapUp: (_) => { connection!.emit('clear', "") },
               child: Icon(Icons.keyboard_arrow_left_rounded, size: _buttonSize),
             ),
             GestureDetector(
-              onTapDown: (_) {
+              onTapDown: (_) { 
                 connection!.emit('drop', "");
                 playing = false;
               },
-              onTapUp: (_) => {connection!.emit('clear', "")},
+              onTapUp: (_) => { connection!.emit('clear', "") },
               child: Icon(Icons.circle, size: _buttonSize),
             ),
             GestureDetector(
-              onTapDown: (_) => {connection!.emit('right', "")},
-              onTapUp: (_) => {connection!.emit('clear', "")},
-              child:
-                  Icon(Icons.keyboard_arrow_right_rounded, size: _buttonSize),
+              onTapDown: (_) => { connection!.emit('right', "") },
+              onTapUp: (_) => { connection!.emit('clear', "") },
+              child: Icon(Icons.keyboard_arrow_right_rounded, size: _buttonSize),
             ),
           ],
         ),
@@ -166,8 +162,8 @@ class _ClawControllerState extends State<ClawController> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GestureDetector(
-              onTapDown: (_) => {connection!.emit('down', "")},
-              onTapUp: (_) => {connection!.emit('clear', "")},
+              onTapDown: (_) => { connection!.emit('down', "") },
+              onTapUp: (_) => { connection!.emit('clear', "") },
               child: Icon(Icons.keyboard_arrow_down_rounded, size: _buttonSize),
             ),
           ],
@@ -177,31 +173,30 @@ class _ClawControllerState extends State<ClawController> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.only(top: _height / 10),
+              padding: EdgeInsets.only(top: _height/10),
               child: Container(
-                  width: _width / 1.2,
-                  height: 40,
-                  decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(_width / 2)),
-                  child: Center(
-                    child: connected == true
-                        ? queue != null
-                            ? Text(
-                                "You are ${queue!.indexOf(connection!.id!)} out of ${queue!.length.toString()} players!",
-                                style: TextStyle(
-                                    fontSize: 20, color: Colors.white))
-                            : Text("Joining Queue...",
-                                style: TextStyle(
-                                    fontSize: 20, color: Colors.white))
-                        : Text("Disconnected!",
-                            style:
-                                TextStyle(fontSize: 20, color: Colors.white)),
-                  )),
+                width: _width/1.2,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.circular(_width/2)
+                ),
+                child: Center(
+                  child: connected == true ? 
+                  queue != null ? 
+                        Text("You are ${queue!.indexOf(connection!.id!)} out of ${queue!.length.toString()} players!", style: TextStyle(fontSize: 20,
+                                                                            color: Colors.white)) :
+                        Text("Joining Queue...", style: TextStyle(fontSize: 20,
+                                                                  color: Colors.white)) : 
+                  Text("Disconnected!", style: TextStyle(fontSize: 20,
+                                                        color: Colors.white)),
+                )
+              ),
             )
           ],
         )
       ],
     );
   }
+
 }
