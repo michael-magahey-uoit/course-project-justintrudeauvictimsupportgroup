@@ -16,7 +16,7 @@ const server = https.createServer(credentials, app);
 const insecure = http.createServer(app);
 
 let queue = [];
-let player = undefined;
+let player = "";
 
 function sleep(ms) { 
     return new Promise((resolve) => {
@@ -64,6 +64,7 @@ wss.on('connection', async (socket) => {
     while (queue[0] != socket.id)
     {
         wss.emit('queue', JSON.stringify({ status: queue, current: player }));
+        print(JSON.stringify({ status: queue, current: player }));
         await sleep(1000);
     }
     player = socket.id;
@@ -104,11 +105,18 @@ wss.on('connection', async (socket) => {
 
 ws.on('connection', async (socket) => {
     queue.push(socket.id);
-    console.log(`[${socket.id}] - New Client ${socket.id}!`);
-    socket.emit('queue', JSON.stringify({ status: queue, current: player }));
+    //We need this incase the queue is empty, because if its empty, we have to send the status
+    //before entering our wait loop, but player is only set after the wait, so we have to use
+    //the queue if its empty.
+    if (queue[0] == socket.id)
+    {
+        socket.emit('queue', JSON.stringify({ status: queue, current: queue[0] }));
+    }
+    else { socket.emit('queue', JSON.stringify({ status: queue, current: player })); }
     while (queue[0] != socket.id)
     {
         socket.emit('queue', JSON.stringify({ status: queue, current: player }));
+        print(JSON.stringify({ status: queue, current: player }));
         await sleep(1000);
     }
     player = socket.id;

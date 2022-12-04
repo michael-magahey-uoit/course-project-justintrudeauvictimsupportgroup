@@ -18,6 +18,7 @@ class ClawController extends StatefulWidget {
 class _ClawControllerState extends State<ClawController> {
   late YoutubePlayerController videoPlayer;
   List<String>? queue = null;
+  String? current_player = null;
   IO.Socket? connection = null;
   bool connected = false;
   bool playing = false;
@@ -45,7 +46,7 @@ class _ClawControllerState extends State<ClawController> {
 
   initSocket() {
     //Create connection with the backend webserver
-    IO.Socket socket = IO.io('http://10.102.61.3:80',
+    IO.Socket socket = IO.io('http://10.0.2.2:80',
       OptionBuilder()
               .setTransports(['websocket'])
               .build()); //Change this to internet later, 10.0.2.2 = host's localhost for emulator
@@ -67,14 +68,20 @@ class _ClawControllerState extends State<ClawController> {
     });
     socket.onDisconnect((_) {
       connected = false;
+      setState(() {
+        queue = null;
+        current_player = null;
+        playing = false;
+      });
       print('Disconnected!');
     });
     socket.on('queue', (queue) {
       print(queue);
       Map<String, dynamic> queueData = jsonDecode(queue);
-      //String = queueData['player']
+      print(queueData);
       setState(() {
         queue = queueData['status'];
+        current_player = queueData['current'];
       });
     });
     socket.on('status', (status) {
@@ -98,7 +105,11 @@ class _ClawControllerState extends State<ClawController> {
         builder: (context, player) =>
             Scaffold(
               appBar: AppBar(
-                title: Text(widget.title!),
+                title: Text(connected == false || current_player == null ? widget.title! : 
+                              connected && current_player != connection!.id.toString() ? 
+                                  "Playing: ${current_player!}" 
+                                  : 
+                                  "You're Up!"),
               ),
               body: _buildClawController(player),
             ),
