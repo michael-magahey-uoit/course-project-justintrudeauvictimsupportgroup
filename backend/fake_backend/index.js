@@ -60,6 +60,14 @@ app.get('/location', async (req, res) => {
 
 wss.on('connection', async (socket) => {
     queue.push(socket.id);
+    //We need this incase the queue is empty, because if its empty, we have to send the status
+    //before entering our wait loop, but player is only set after the wait, so we have to use
+    //the queue if its empty.
+    if (queue[0] == socket.id)
+    {
+        socket.emit('queue', JSON.stringify({ status: queue, current: queue[0] }));
+    }
+    else { socket.emit('queue', JSON.stringify({ status: queue, current: player })); }
     console.log(`[${socket.id}] - New Client ${socket.id}!`);
     while (queue[0] != socket.id)
     {

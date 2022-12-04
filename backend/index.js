@@ -91,6 +91,14 @@ const insecure_wss = require('socket.io')(insecure_server, {
 //websocket client handler
 wss.on('connection', async (ws) => {
     queue.push(ws.id);
+    //We need this incase the queue is empty, because if its empty, we have to send the status
+    //before entering our wait loop, but player is only set after the wait, so we have to use
+    //the queue if its empty.
+    if (queue[0] == socket.id)
+    {
+        socket.emit('queue', JSON.stringify({ status: queue, current: queue[0] }));
+    }
+    else { socket.emit('queue', JSON.stringify({ status: queue, current: player })); }
     console.log(`[${ws.id}] - New Client ${ws.id}!`);
     while (queue[0] != ws.id)
     {
@@ -147,6 +155,14 @@ wss.on('connection', async (ws) => {
 
 insecure_wss.on('connection', async (ws) => {
     queue.push(ws.id);
+    //We need this incase the queue is empty, because if its empty, we have to send the status
+    //before entering our wait loop, but player is only set after the wait, so we have to use
+    //the queue if its empty.
+    if (queue[0] == socket.id)
+    {
+        socket.emit('queue', JSON.stringify({ status: queue, current: queue[0] }));
+    }
+    else { socket.emit('queue', JSON.stringify({ status: queue, current: player })); }
     console.log(`[${ws.id}] - New Client ${ws.id}!`);
     while (queue[0] != ws.id)
     {
