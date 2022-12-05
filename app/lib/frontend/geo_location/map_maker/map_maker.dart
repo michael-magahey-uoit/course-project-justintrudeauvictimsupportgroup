@@ -19,7 +19,7 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(120, 250, 0, 0),
-        title: const Text('Claw Machines'),
+        title: const Text('Claw Machines Locator'),
       ),
       body: Stack(
         children: [
