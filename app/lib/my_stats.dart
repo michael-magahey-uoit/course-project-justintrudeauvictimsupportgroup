@@ -15,8 +15,9 @@ class _MyStatsState extends State<MyStats> {
 
   List<PlayItem>? _plays;
   final _model = PlayModel();
-  bool filter = false;
-  String? dateFilter;
+  bool _filter = false;
+  String? _dateFilter;
+  int? _sortColumnIndex;
 
   @override
   void initState(){
@@ -43,29 +44,23 @@ class _MyStatsState extends State<MyStats> {
                   if(value == null){
                     return;
                   }
-                  filter = true;
-                  dateFilter = "${value!.year}-${value!.month}-${value!.day}";
+                  _filter = true;
+                  _dateFilter = "${value!.year}-${value!.month}-${value!.day}";
                   getPlays();
                   setState(() {
                     _plays;
                   });
                 });
               },
-              icon: const Icon(Icons.sort)
+              icon: const Icon(Icons.sort),
+              tooltip: "Choose a date to filter by.",
           ),
           IconButton(
               onPressed: (){
-                _model.insertPlay(PlayItem(date: "2021-7-17", playTime: "40"));
-                _model.insertPlay(PlayItem(date: "2021-9-19", playTime: "35"));
-                _model.insertPlay(PlayItem(date: "2021-12-4", playTime: "23"));
-                _model.insertPlay(PlayItem(date: "2021-12-5", playTime: "32"));
-                _model.insertPlay(PlayItem(date: "2021-12-6", playTime: "40"));
-                _model.insertPlay(PlayItem(date: "2022-4-22", playTime: "12"));
-                _model.insertPlay(PlayItem(date: "2022-11-14", playTime: "33"));
-                _model.insertPlay(PlayItem(date: "2022-11-14", playTime: "14"));
-                _model.insertPlay(PlayItem(date: "2022-11-14", playTime: "37"));
+                _filter = false;
               },
-              icon: Icon(Icons.format_clear)
+              icon: const Icon(Icons.format_clear),
+              tooltip: "Clear the date filter.",
           ),
         ],
       ),
@@ -75,11 +70,11 @@ class _MyStatsState extends State<MyStats> {
 
   Future getPlays() async{
     List allPlays = await _model.getAllPlays();
-    if(filter == true){
+    if(_filter == true){
       _plays = [];
       for(PlayItem play in allPlays){
-        print("1.${play.date}  2.$dateFilter");
-        if(play.date == dateFilter){
+        print("1.${play.date}  2.$_dateFilter");
+        if(play.date == _dateFilter){
           _plays?.add(play);
         }
       }
@@ -99,26 +94,33 @@ class _MyStatsState extends State<MyStats> {
         future: buildReady(),
         builder: (context, snapshot){
           if(snapshot.hasData){
-            return SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: DataTable(
-                columns: const [
-                  DataColumn(label: Text("Date")),
-                  DataColumn(label: Text("Play Time (s)"))
-                ],
-                rows: _plays!.map(
-                        (play) => DataRow(
-                        cells: <DataCell>[
-                          DataCell(
-                              Text(play.date!)
-                          ),
-                          DataCell(
-                              Text(play.playTime!)
-                          ),
-                        ]
-                    )
-                ).toList(),
+            return Row(
+              children: 
+              [
+                Expanded(
+                  child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: DataTable(
+                    columns: const [
+                      DataColumn(label: Text("Date")),
+                      DataColumn(label: Text("Play Time (s)"))
+                    ],
+                    rows: _plays!.map(
+                            (play) => DataRow(
+                            cells: <DataCell>[
+                              DataCell(
+                                  Text(play.date!)
+                              ),
+                              DataCell(
+                                  Text(play.playTime!)
+                              ),
+                            ]
+                        )
+                    ).toList(),
+                  ),
               ),
+                ),
+            ]
             );
           }
           return const SizedBox(

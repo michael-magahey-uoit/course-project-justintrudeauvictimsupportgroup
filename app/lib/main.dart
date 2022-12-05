@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
           return ClawController(title: "The Claw",);
         },
         '/myStats': (BuildContext context){
-          return MyStats(title: "My Stats",);
+          return MyStats(title: "Play History",);
         }
       },
     );

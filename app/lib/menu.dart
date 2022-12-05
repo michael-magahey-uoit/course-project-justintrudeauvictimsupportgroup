@@ -61,7 +61,7 @@ class _MainMenuState extends State<MainMenu> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
                   Icon(Icons.insert_chart),
-                  Text("My Stats", style: TextStyle(fontSize: 40))
+                  Text("Play History", style: TextStyle(fontSize: 40))
                 ],
               ),
             ),
