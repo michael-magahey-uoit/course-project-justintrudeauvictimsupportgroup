@@ -1,4 +1,4 @@
-import 'dart:js_util';
+//import 'dart:js_util';
 import 'package:latlong2/latlong.dart';
 
 class MapMarker {

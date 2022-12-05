@@ -46,9 +46,6 @@ class _MyStatsState extends State<MyStats> {
 
   Future<bool> buildReady() async{
     await getPlays();
-    for(PlayItem pla in _plays!){
-      print("${pla.date}");
-    }
     return true;
   }
 
