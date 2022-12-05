@@ -45,7 +45,13 @@ dependencies:
   line_chart: ^1.0.9
   pie_chart: ^5.3.2
   socket_io_client: ^2.0.0-beta.2
-
+  firebase_core:
+  firebase_messaging:
+  overlay_support:
+  geocoding:
+  geolocator:
+  geolocator_android:
+  http:
 
 dev_dependencies:
   flutter_test:

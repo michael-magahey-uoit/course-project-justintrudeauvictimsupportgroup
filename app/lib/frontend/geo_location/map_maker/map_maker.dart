@@ -19,7 +19,7 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(120, 250, 0, 0),
-        title: const Text('Map Test'),
+        title: const Text('Claw Machines'),
       ),
       body: Stack(
         children: [
@@ -33,7 +33,7 @@ class _MapPageState extends State<MapPage> {
             layers: [
               TileLayerOptions(
                 urlTemplate:
-                    'https://api.mapbox.com/styles/v1/haarisahmed/clabxwqi8002j15nsc4fpay2x/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiaGFhcmlzYWhtZWQiLCJhIjoiY2xhYnhmc2I0MDR4MjNycGUzaHl5ZmQ3YSJ9.wP2USfn6Uhyto8qnogGhuQ',
+                'https://api.mapbox.com/styles/v1/haarisahmed/clabxwqi8002j15nsc4fpay2x/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiaGFhcmlzYWhtZWQiLCJhIjoiY2xhYnhmc2I0MDR4MjNycGUzaHl5ZmQ3YSJ9.wP2USfn6Uhyto8qnogGhuQ',
                 additionalOptions: {
                   'mapStyleId': AppConstants.mapBoxStyleId,
                   'accessToken': AppConstants.mapBoxAccessToken,
