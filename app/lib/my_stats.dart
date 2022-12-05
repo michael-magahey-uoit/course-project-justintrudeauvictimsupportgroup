@@ -15,6 +15,8 @@ class _MyStatsState extends State<MyStats> {
 
   List<PlayItem>? _plays;
   final _model = PlayModel();
+  bool filter = false;
+  String? dateFilter;
 
   @override
   void initState(){
@@ -30,9 +32,41 @@ class _MyStatsState extends State<MyStats> {
         title: Text(widget.title!),
         actions: [
           IconButton(
-              onPressed: (){},
+              onPressed: (){
+                showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2020),
+                    lastDate: DateTime.now(),
+                    helpText: "Pick a date you want to see your plays on"
+                ).then((value){
+                  if(value == null){
+                    return;
+                  }
+                  filter = true;
+                  dateFilter = "${value!.year}-${value!.month}-${value!.day}";
+                  getPlays();
+                  setState(() {
+                    _plays;
+                  });
+                });
+              },
               icon: const Icon(Icons.sort)
-          )
+          ),
+          IconButton(
+              onPressed: (){
+                _model.insertPlay(PlayItem(date: "2021-7-17", playTime: "40"));
+                _model.insertPlay(PlayItem(date: "2021-9-19", playTime: "35"));
+                _model.insertPlay(PlayItem(date: "2021-12-4", playTime: "23"));
+                _model.insertPlay(PlayItem(date: "2021-12-5", playTime: "32"));
+                _model.insertPlay(PlayItem(date: "2021-12-6", playTime: "40"));
+                _model.insertPlay(PlayItem(date: "2022-4-22", playTime: "12"));
+                _model.insertPlay(PlayItem(date: "2022-11-14", playTime: "33"));
+                _model.insertPlay(PlayItem(date: "2022-11-14", playTime: "14"));
+                _model.insertPlay(PlayItem(date: "2022-11-14", playTime: "37"));
+              },
+              icon: Icon(Icons.format_clear)
+          ),
         ],
       ),
       body: _buildStatsTable(),
@@ -40,8 +74,19 @@ class _MyStatsState extends State<MyStats> {
   }
 
   Future getPlays() async{
-    List temp = await _model.getAllPlays();
-    _plays = temp.cast<PlayItem>();
+    List allPlays = await _model.getAllPlays();
+    if(filter == true){
+      _plays = [];
+      for(PlayItem play in allPlays){
+        print("1.${play.date}  2.$dateFilter");
+        if(play.date == dateFilter){
+          _plays?.add(play);
+        }
+      }
+    }
+    else {
+      _plays = allPlays.cast<PlayItem>();
+    }
   }
 
   Future<bool> buildReady() async{

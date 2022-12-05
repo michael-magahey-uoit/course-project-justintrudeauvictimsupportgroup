@@ -13,6 +13,15 @@ class PlayModel {
     );
   }
 
+  Future<int> deletePlayWithId(int id) async{
+    final db = await DBUtils.init();
+    return db.delete(
+      'play_items',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
   Future getAllPlays() async{
     final db = await DBUtils.init();
     final List maps = await db.query('play_items');

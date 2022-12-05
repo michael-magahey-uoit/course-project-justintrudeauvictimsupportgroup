@@ -167,7 +167,7 @@ class _ClawControllerState extends State<ClawController> {
                 String year = end.year as String;
                 String month = end.month as String;
                 String day = end.day as String;
-                String date = "$day, $month, $year";
+                String date = "$year-$month-$day";
                 stopwatch.stop();
                 String playTime = stopwatch.elapsedMilliseconds/1000 as String;
 
