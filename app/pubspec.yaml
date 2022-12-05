@@ -49,6 +49,7 @@ dependencies:
   overlay_support:
   geocoding:
   geolocator:
+  firebase_core:
 
 dev_dependencies:
   flutter_test:
