@@ -1,3 +1,5 @@
+import 'package:claw/play_item.dart';
+import 'package:claw/play_model.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -23,6 +25,8 @@ class _ClawControllerState extends State<ClawController> {
   bool connected = false;
   bool playing = false;
   final _claw = ClawMovement();
+  final _model = PlayModel();
+  final stopwatch = Stopwatch();
 
   @override
   void initState(){
@@ -91,6 +95,7 @@ class _ClawControllerState extends State<ClawController> {
       });
       //Record Keeping Here (Local Storage)
       //Notification Here (You are playing)
+      stopwatch.start();
     });
     connection = socket;
     //Make a dispose function to clear the connection memory
@@ -158,6 +163,17 @@ class _ClawControllerState extends State<ClawController> {
               onTapDown: (_) { 
                 connection!.emit('drop', "");
                 playing = false;
+                DateTime end = DateTime.now();
+                String year = end.year as String;
+                String month = end.month as String;
+                String day = end.day as String;
+                String date = "$day, $month, $year";
+                stopwatch.stop();
+                String playTime = stopwatch.elapsedMilliseconds/1000 as String;
+
+                PlayItem playItem = PlayItem(date: date, playTime: playTime);
+                _model.insertPlay(playItem);
+                stopwatch.reset();
               },
               onTapUp: (_) => { connection!.emit('clear', "") },
               child: Icon(Icons.circle, size: _buttonSize),
