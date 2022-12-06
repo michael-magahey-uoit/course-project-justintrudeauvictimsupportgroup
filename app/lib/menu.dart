@@ -135,7 +135,7 @@ class _MainMenuState extends State<MainMenu> {
                 width: _width / 1.5,
                 height: _height / 12,
                 decoration: const BoxDecoration(
-                    color: Colors.purple,
+                    color: Colors.orange,
                     borderRadius: BorderRadius.all(Radius.circular(20))
                 ),
                 child: Row(

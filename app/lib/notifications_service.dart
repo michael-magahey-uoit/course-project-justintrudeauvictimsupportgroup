@@ -6,6 +6,7 @@ import 'package:timezone/data/latest.dart' as tzData;
 class NotificationService {
   static final NotificationService _notificationService = NotificationService._internal();
   static final FlutterLocalNotificationsPlugin localNotifications = FlutterLocalNotificationsPlugin();
+  static int notificationCount = 0;
   factory NotificationService() {
     return _notificationService;
   }
@@ -27,6 +28,7 @@ class NotificationService {
         priority: Priority.high
     );
 
-    await localNotifications.show(0, title, body, NotificationDetails(android: channelSpecifics));
+    await localNotifications.show(notificationCount, title, body, NotificationDetails(android: channelSpecifics));
+    notificationCount += 1;
   }
 }
