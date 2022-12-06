@@ -51,6 +51,7 @@ dependencies:
   geolocator:
   firebase_core: ^2.3.0
   cloud_firestore: 
+  sliding_up_panel:
 
 dev_dependencies:
   flutter_test:
