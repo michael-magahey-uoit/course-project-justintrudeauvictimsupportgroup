@@ -55,12 +55,19 @@ class _ChartPageState extends State<ChartPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text('Phone Types'),
-                    pi.SimplePieChart(
-                      seriesList: snapshot.data.docs.map((document) =>
-                          _buildPhones(context, document)
-                              as Map<String, double>),
-                    )
+                    if (snapshot.hasData) ...[
+                      Text('Phone Types'),
+                      pi.SimplePieChart(
+                        seriesList: snapshot.data.docs.map((document) =>
+                            _buildPhones(context, document)
+                                as Map<String, double>),
+                      )
+                    ] else ...[
+                      Text('Phone Types'),
+                      pi.SimplePieChart(
+                        seriesList: _piData,
+                      )
+                    ]
                   ],
                 ),
               );
