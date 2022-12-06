@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'frontend/stats_charts/chartmenu.dart' as chart;
+import 'package:firebase_core/firebase_core.dart';
 import 'package:claw/frontend/geo_location/map_maker/map_maker.dart'
     as map_maker;
 
@@ -13,12 +14,22 @@ class MainMenu extends StatefulWidget {
 class _MainMenuState extends State<MainMenu> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Main Menu"),
-      ),
-      body: _buildMainMenu(),
-    );
+    return FutureBuilder(
+        future: Firebase.initializeApp(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            print("Error initializing Firebase");
+          }
+          if (snapshot.connectionState == ConnectionState.done) {
+            print("Successfully connected to Firebase");
+          }
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text("Main Menu"),
+            ),
+            body: _buildMainMenu(),
+          );
+        });
   }
 
   Widget _buildMainMenu() {
