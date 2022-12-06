@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'chartpage.dart' as chart;
 
 class ChartMenu extends StatefulWidget {
-  ChartMenu({Key? key, this.data}) : super(key: key);
-  String? data;
+  /**
+   * This class navigates to which chart to display.
+   * data: String
+   */
+  ChartMenu({Key? key}) : super(key: key);
 
   @override
   State<ChartMenu> createState() => _ChartMenuState();
@@ -20,6 +23,7 @@ class _ChartMenuState extends State<ChartMenu> {
   }
 
   switchPage(int index) {
+    //Determines which chart to display
     if (index == 0) {
       return chart.ChartPage(data: 'line');
     } else if (index == 1) {

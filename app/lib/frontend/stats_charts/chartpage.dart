@@ -22,8 +22,6 @@ class ChartPage extends StatefulWidget {
 }
 
 class _ChartPageState extends State<ChartPage> {
-  var _stats;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,37 +29,40 @@ class _ChartPageState extends State<ChartPage> {
           title: Text("Global Stats"),
         ),
         body: Center(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (widget.data == 'pi') ...[
-              buildPieChart(),
-            ] else if (widget.data == 'line') ...[
-              buildLineChartHard([1, 2, 4, 3, 5]),
-            ] else ...[
-              Text("Please Select an Option"),
-            ],
-          ],
-        )));
+            child: Container(
+                height: 500,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (widget.data == 'pi') ...[
+                      buildPieChart(),
+                    ] else if (widget.data == 'line') ...[
+                      buildLineChartHard([1, 2, 4, 3, 5]),
+                    ] else ...[
+                      Text("Please Select an Option"),
+                    ],
+                  ],
+                ))));
   }
 
   buildPieChart() {
-    return FutureBuilder(
-        future: getPhones(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          //_buildPhones(context, snapshot.data.docs[0].data()['phone_types']);
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text('Phone Types'),
-                pi.SimplePieChart(
-                  seriesList: _piData,
-                )
-              ],
-            ),
-          );
-        });
+    return Container(
+        height: 300,
+        child: FutureBuilder(
+            future: getPhones(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('Phone Types'),
+                    pi.SimplePieChart(
+                      seriesList: _piData,
+                    )
+                  ],
+                ),
+              );
+            }));
   }
 
   List<double> _buildList(BuildContext context, DocumentSnapshot productData) {
@@ -79,56 +80,25 @@ class _ChartPageState extends State<ChartPage> {
     print(phones);
   }
 
-/*buildLineChart(List<double> data) {
-  return FutureBuilder(
-      future: getPlaytimes(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (!snapshot.hasData) {
-          return Text("Loading");
-        }
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text('Play Times'),
-              ch.SimpleLineChart(
-                seriesList: snapshot.data.docs
-                    .map((document) => _buildList(context, document)),
-              ),
-            ],
-          ),
-        );
-      });}*/
-
   buildLineChart(List<double> data) {
     return FutureBuilder(
         future: getPlaytimes(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          print("Snapshot: $snapshot");
           if (!snapshot.hasData) {
-            print("Data is missing");
-            return CircularProgressIndicator();
-          } else {
-            print("Data found");
-            print("Length: ${snapshot.data.docs.length}");
-            Color _color = Colors.white;
-            return ListView.builder(
-              itemCount: snapshot.data.docs.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                    ),
-                    child: ListTile(
-                      title: Text(snapshot.data.docs[index].data()["time"]),
-                    ),
-                  ),
-                );
-              },
-            );
+            return Text("Loading");
           }
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text('Play Times'),
+                ch.SimpleLineChart(
+                  seriesList: snapshot.data.docs
+                      .map((document) => _buildList(context, document)),
+                ),
+              ],
+            ),
+          );
         });
   }
 
