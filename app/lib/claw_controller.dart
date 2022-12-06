@@ -50,12 +50,14 @@ class _ClawControllerState extends State<ClawController> {
     );
   }
 
+  //Initializes the connection to the backend webserver
   initSocket() {
-    //Create connection with the backend webserver
     IO.Socket socket = IO.io('http://10.0.2.2:80',
       OptionBuilder()
               .setTransports(['websocket'])
               .build()); //Change this to internet later, 10.0.2.2 = host's localhost for emulator
+
+    //OnConnect event runs when we achieve a connection to the backend server
     socket.onConnect((_) async {
       socket.emit('dbg', "Connected!");
       await notifier.init();
@@ -103,14 +105,21 @@ class _ClawControllerState extends State<ClawController> {
         connected = true;
       });
     });
+
+    //OnConnecting event fires when a connection is being attempted
     socket.onConnecting((_) {
       connected = false;
       print("Connecting...");
     });
+
+    //OnConnectError event fires when we fail to connect to the webserver
     socket.onConnectError((err) {
       connected = false;
       print("Socket Error: ${err}");
     });
+
+    //OnDisconnect event fires when we disconnect from the webserver, perfect for
+    //cleaning our properties between plays
     socket.onDisconnect((_) {
       connected = false;
       setState(() {
@@ -120,16 +129,21 @@ class _ClawControllerState extends State<ClawController> {
       });
       print('Disconnected!');
     });
-    socket.on('queue', (queue) async {
-      print(queue);
-      Map<String, dynamic> queueData = jsonDecode(queue);
+
+    //queue event fires when we receive an update for the queue, this allows us to send
+    //notifications to the user about their position in line.
+    socket.on('queue', (queue_packet) async {
+      print(queue_packet);
+      Map<String, dynamic> queueData = jsonDecode(queue_packet);
       print(queueData);
       await notifier.notify("Queue Update!", queueData['status'][0] == socket.id ? "You're now playing!" : "You are now ${queueData['status'].indexOf(socket.id) + 1} out of ${queueData['status'].length}");
       setState(() {
-        queue = queueData['status'];
-        current_player = queueData['current'];
+        queue = queueData['status'].cast<String>();
+        current_player = queueData['current'].toString();
       });
     });
+
+    //status event only fires when it is the users turn to play.
     socket.on('status', (status) async {
       print("[${socket.id}] -> ${status}");
       setState(() {
@@ -193,6 +207,8 @@ class _ClawControllerState extends State<ClawController> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
+                //Send the server a packet when we start pressing and one when we stop
+                //This allows for fluid play without spamming the server.
                 onTapDown: (_) => { connection!.emit('up', "") },
                 onTapUp: (_) => { connection!.emit('clear', "") },
                 child: Icon(Icons.keyboard_arrow_up_rounded, size: _buttonSize, color: Colors.white,),
@@ -233,6 +249,7 @@ class _ClawControllerState extends State<ClawController> {
                             TextButton(
                                 onPressed: (){
                                   Navigator.of(context).pop();
+                                  //Reset the socket so that the user is at the back of the queue
                                   connection!.disconnect();
                                   initSocket();
                                   connection!.connect();
@@ -289,7 +306,7 @@ class _ClawControllerState extends State<ClawController> {
                   child: Center(
                     child: connected == true ?
                       queue != null ?
-                            Text("You are ${queue!.indexOf(connection!.id!)} out of ${queue!.length.toString()} players!", style: TextStyle(fontSize: 20,
+                            Text("You are ${queue!.indexOf(connection!.id!) + 1} out of ${queue!.length.toString()} players!", style: TextStyle(fontSize: 20,
                                                                                 color: Colors.white)) :
                             Text("Joining Queue...", style: TextStyle(fontSize: 20,
                                                                       color: Colors.white)) :
