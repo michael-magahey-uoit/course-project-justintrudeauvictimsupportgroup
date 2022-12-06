@@ -159,6 +159,7 @@ class _ClawControllerState extends State<ClawController> {
               onTapUp: (_) => { connection!.emit('clear', "") },
               child: Icon(Icons.keyboard_arrow_left_rounded, size: _buttonSize),
             ),
+            //When the player drops the claw a play is recorded into the database
             GestureDetector(
               onTapDown: (_) { 
                 connection!.emit('drop', "");
