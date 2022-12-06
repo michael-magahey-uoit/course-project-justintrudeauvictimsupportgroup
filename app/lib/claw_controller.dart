@@ -196,16 +196,15 @@ class _ClawControllerState extends State<ClawController> {
             ),
             //When the player drops the claw a play is recorded into the database
             GestureDetector(
-              onTapDown: (_) { 
+              onTapDown: (_) async {
                 connection!.emit('drop', "");
                 playing = false;
                 DateTime end = DateTime.now();
-                String year = end.year as String;
-                String month = end.month as String;
-                String day = end.day as String;
-                String date = "$year-$month-$day";
+                String date = "${end.year}-${end.month}-${end.day}";
                 stopwatch.stop();
-                String playTime = stopwatch.elapsedMilliseconds/1000 as String;
+                String playTime = "${stopwatch.elapsedMilliseconds/1000}";
+                print("Date: $date");
+                print("Playtime: $playTime");
 
                 PlayItem playItem = PlayItem(date: date, playTime: playTime);
                 _model.insertPlay(playItem);
