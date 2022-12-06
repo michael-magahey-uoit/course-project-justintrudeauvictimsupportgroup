@@ -17,3 +17,13 @@ class Phones {
     };
   }
 }
+
+class ChartData {
+  int? index;
+  double? yValue;
+  DocumentReference? reference;
+
+  ChartData.fromMap(var map, {this.reference}) {
+    this.yValue = map['time'];
+  }
+}
