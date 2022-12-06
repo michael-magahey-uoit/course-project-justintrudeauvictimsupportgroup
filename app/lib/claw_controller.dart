@@ -138,7 +138,6 @@ class _ClawControllerState extends State<ClawController> {
       stopwatch.start();
     });
     connection = socket;
-    //Make a dispose function to clear the connection memory
   }
 
   @override
