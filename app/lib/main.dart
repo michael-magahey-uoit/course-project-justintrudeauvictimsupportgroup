@@ -3,7 +3,8 @@ import 'claw_controller.dart';
 import 'menu.dart';
 import 'my_stats.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 

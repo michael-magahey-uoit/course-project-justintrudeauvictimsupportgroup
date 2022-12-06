@@ -41,6 +41,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_map: ^1.1.1
   charts_flutter_new:
+  flutter_local_notifications:
   web_socket_channel: ^2.2.0
   line_chart: ^1.0.9
   pie_chart: ^5.3.2
@@ -50,9 +51,10 @@ dependencies:
   geocoding:
   geolocator:
   firebase_core: ^2.3.0
-  cloud_firestore:
+  cloud_firestore: 
   device_info_plus:
   unique_identifier:
+  timezone:
 
 
 dev_dependencies:

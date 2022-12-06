@@ -6,6 +6,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:unique_identifier/unique_identifier.dart';
+import 'notifications_service.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -27,9 +28,10 @@ class _ClawControllerState extends State<ClawController> {
   bool playing = false;
   final _model = PlayModel();
   final stopwatch = Stopwatch();
+  NotificationService notifier = NotificationService();
 
   @override
-  void initState(){
+  void initState() {
     initSocket();
     super.initState();
 
@@ -56,6 +58,8 @@ class _ClawControllerState extends State<ClawController> {
               .build()); //Change this to internet later, 10.0.2.2 = host's localhost for emulator
     socket.onConnect((_) async {
       socket.emit('dbg', "Connected!");
+      await notifier.init();
+      await notifier.notify("Claw Controller", "Connected!");
       //Record Keeping Here (Cloud Storage)
       DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
       switch (Platform.operatingSystem)
@@ -116,10 +120,11 @@ class _ClawControllerState extends State<ClawController> {
       });
       print('Disconnected!');
     });
-    socket.on('queue', (queue) {
+    socket.on('queue', (queue) async {
       print(queue);
       Map<String, dynamic> queueData = jsonDecode(queue);
       print(queueData);
+      await notifier.notify("Queue Update!", queueData['status'][0] == socket.id ? "You're now playing!" : "You are now ${queueData['status'].indexOf(socket.id) + 1} out of ${queueData['status'].length}");
       setState(() {
         queue = queueData['status'];
         current_player = queueData['current'];
@@ -130,7 +135,6 @@ class _ClawControllerState extends State<ClawController> {
       setState(() {
         playing = true;
       });
-      //Notification Here (You are playing)
       stopwatch.start();
     });
     connection = socket;
