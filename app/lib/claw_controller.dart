@@ -37,7 +37,7 @@ class _ClawControllerState extends State<ClawController> {
 
     //TODO: Put actual url in
     //url of claw machine stream
-    const url = 'https://www.youtube.com/watch?v=jfKfPfyJRdk';
+    const url = 'https://youtu.be/vg9v-qLQ0Qs';
 
     //Create the youtube player and set it to auto play
     //when loaded and give it livestream attributes
@@ -52,7 +52,7 @@ class _ClawControllerState extends State<ClawController> {
 
   //Initializes the connection to the backend webserver
   initSocket() {
-    IO.Socket socket = IO.io('http://10.0.2.2:80',
+    IO.Socket socket = IO.io('http://3f7c7f6e26bc9a.lhr.life',
       OptionBuilder()
               .setTransports(['websocket'])
               .build()); //Change this to internet later, 10.0.2.2 = host's localhost for emulator

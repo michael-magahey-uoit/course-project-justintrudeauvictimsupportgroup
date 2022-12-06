@@ -7,13 +7,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-Future<IP> fetchAlbum() async {
+Future<String> fetchAlbum() async {
   final response = await http.get(Uri.parse('http://10.0.2.2:80/location'));
 
   // Appropriate action depending upon the
   // server response
   if (response.statusCode == 200) {
-    return IP.fromJson(json.decode(response.body));
+    return jsonDecode(response.body)['ip'];
   } else {
     throw Exception('Failed to load album');
   }
