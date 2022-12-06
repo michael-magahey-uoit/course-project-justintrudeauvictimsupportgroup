@@ -2,8 +2,10 @@ class PlayItem{
   int? id;
   String? date;
   String? playTime;
+  double? latitude;
+  double? longitude;
 
-  PlayItem({this.id, this.date, this.playTime});
+  PlayItem({this.id, this.date, this.playTime, this.latitude, this.longitude});
 
   PlayItem.fromMap(Map map){
     this.id = map['id'];
