@@ -15,15 +15,19 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Group Project',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
       ),
       home: MainMenu(), //ClawController(title: "Claw Machine"),
       routes: <String, WidgetBuilder>{
-        '/playClaw': (BuildContext context){
-          return ClawController(title: "The Claw",);
+        '/playClaw': (BuildContext context) {
+          return ClawController(
+            title: "The Claw",
+          );
         },
-        '/myStats': (BuildContext context){
-          return MyStats(title: "Play History",);
+        '/myStats': (BuildContext context) {
+          return MyStats(
+            title: "Play History",
+          );
         }
       },
     );
@@ -40,7 +44,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
