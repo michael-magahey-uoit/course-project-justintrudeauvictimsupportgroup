@@ -220,7 +220,7 @@ class _ClawControllerState extends State<ClawController> {
                   print("Playtime: $playTime");
 
                   PlayItem playItem = PlayItem(date: date, playTime: playTime);
-                  //_model.insertPlay(playItem);
+                  _model.insertPlay(playItem);
                   stopwatch.reset();
 
                   showDialog(context: context,
@@ -278,7 +278,7 @@ class _ClawControllerState extends State<ClawController> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: EdgeInsets.only(top: _height/6),
+                padding: EdgeInsets.only(top: _height/10),
                 child: Container(
                   width: _width/1.2,
                   height: 40,
