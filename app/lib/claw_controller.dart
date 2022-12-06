@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:socket_io_client/socket_io_client.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'dart:convert';
+import 'dart:io';
 
 import 'claw_movement.dart';
 
@@ -54,10 +56,44 @@ class _ClawControllerState extends State<ClawController> {
       OptionBuilder()
               .setTransports(['websocket'])
               .build()); //Change this to internet later, 10.0.2.2 = host's localhost for emulator
-    socket.onConnect((_) {
+    socket.onConnect((_) async {
       socket.emit('dbg', "Connected!");
       //Record Keeping Here (Cloud Storage)
-      
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      switch (Platform.operatingSystem)
+      {
+        case "android":
+          {
+            AndroidDeviceInfo androidDevice = await deviceInfo.androidInfo;
+            print(androidDevice.toMap());
+            //These prints will eventually be sent to firebase
+          }
+          break;
+        case "ios":
+          {
+            IosDeviceInfo iosDevice = await deviceInfo.iosInfo;
+            print(iosDevice.toMap());
+          }
+          break;
+        case "windows":
+          {
+            WindowsDeviceInfo windowsDevice = await deviceInfo.windowsInfo;
+            print(windowsDevice.toMap());
+          }
+          break;
+        case "macos":
+          {
+            MacOsDeviceInfo macosDevice = await deviceInfo.macOsInfo;
+            print(macosDevice.toMap());
+          }
+          break;
+        case "linux":
+          {
+            LinuxDeviceInfo linuxDevice = await deviceInfo.linuxInfo;
+            print(linuxDevice.toMap());
+          }
+          break;
+      }
       setState(() {
         connected = true;
       });
@@ -88,12 +124,11 @@ class _ClawControllerState extends State<ClawController> {
         current_player = queueData['current'];
       });
     });
-    socket.on('status', (status) {
+    socket.on('status', (status) async {
       print("[${socket.id}] -> ${status}");
       setState(() {
         playing = true;
       });
-      //Record Keeping Here (Local Storage)
       //Notification Here (You are playing)
       stopwatch.start();
     });
@@ -210,11 +245,11 @@ class _ClawControllerState extends State<ClawController> {
                 ),
                 child: Center(
                   child: connected == true ? 
-                  queue != null ? 
-                        Text("You are ${queue!.indexOf(connection!.id!)} out of ${queue!.length.toString()} players!", style: TextStyle(fontSize: 20,
-                                                                            color: Colors.white)) :
-                        Text("Joining Queue...", style: TextStyle(fontSize: 20,
-                                                                  color: Colors.white)) : 
+                    queue != null ? 
+                          Text("You are ${queue!.indexOf(connection!.id!)} out of ${queue!.length.toString()} players!", style: TextStyle(fontSize: 20,
+                                                                              color: Colors.white)) :
+                          Text("Joining Queue...", style: TextStyle(fontSize: 20,
+                                                                    color: Colors.white)) : 
                   Text("Disconnected!", style: TextStyle(fontSize: 20,
                                                         color: Colors.white)),
                 )
