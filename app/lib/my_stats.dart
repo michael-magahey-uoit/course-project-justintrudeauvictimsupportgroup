@@ -45,7 +45,7 @@ class _MyStatsState extends State<MyStats> {
                     return;
                   }
                   _filter = true;
-                  _dateFilter = "${value!.year}-${value!.month}-${value!.day}";
+                  _dateFilter = "${value.year}-${value.month}-${value.day}";
                   getPlays();
                   setState(() {
                     _plays;
