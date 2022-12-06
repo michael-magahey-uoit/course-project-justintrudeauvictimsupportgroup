@@ -1,3 +1,4 @@
+import 'package:claw/frontend/geo_location/location_page/locations_page.dart';
 import 'package:flutter/material.dart';
 import 'claw_controller.dart';
 import 'menu.dart';
@@ -29,6 +30,9 @@ class MyApp extends StatelessWidget {
           return MyStats(
             title: "Play History",
           );
+        },
+        '/getLocation': (BuildContext context) {
+          return const winnerLocationPage();
         }
       },
     );

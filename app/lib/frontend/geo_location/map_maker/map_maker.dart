@@ -1,7 +1,24 @@
+import 'package:claw/frontend/geo_location/location_page/locations_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'constants.dart';
 import 'mapMarkers.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+Future<IP> fetchAlbum() async {
+  final response = await http.get(Uri.parse('http://10.0.2.2:80/location'));
+
+  // Appropriate action depending upon the
+  // server response
+  if (response.statusCode == 200) {
+    return IP.fromJson(json.decode(response.body));
+  } else {
+    throw Exception('Failed to load album');
+  }
+}
+
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -11,6 +28,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
+
   final pageController = PageController();
   int selectedIndex = 0;
 
@@ -20,6 +38,22 @@ class _MapPageState extends State<MapPage> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(250, 250, 140, 0),
         title: const Text('Claw Machines Locator'),
+        actions: [
+          IconButton(
+            tooltip: "Get Your Current Location",
+              onPressed: () async{
+                MapMarker currLocation = await Navigator.pushNamed(context, '/getLocation') as MapMarker;
+
+                //add current marker to map marker
+                //mapMarkers.add(MapMarker(image: currLocation.image, title: currLocation.title, address: currLocation.address, location: currLocation.location));
+                print(currLocation.title);
+                print(currLocation.address);
+                print(currLocation.location);
+              },
+              icon: const Icon(Icons.location_searching)
+          )
+        ],
+
       ),
       body: Stack(
         children: [
