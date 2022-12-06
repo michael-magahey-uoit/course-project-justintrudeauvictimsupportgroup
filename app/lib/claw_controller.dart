@@ -1,5 +1,5 @@
-import 'package:claw/play_item.dart';
-import 'package:claw/play_model.dart';
+import 'package:claw/frontend/local_storage/play_item.dart';
+import 'package:claw/frontend/local_storage/play_model.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -163,136 +163,146 @@ class _ClawControllerState extends State<ClawController> {
   Widget _buildClawController(Widget player) {
     double _width = MediaQuery.of(context).size.width; //Width of device
     double _height = MediaQuery.of(context).size.height; //Height of device
-    double _buttonSize = 50.0; //Size of controller buttons
+    double _buttonSize = 60.0; //Size of controller buttons
     double _buttonPadding = 5.0; //Size of button padding
 
-    return Column(
-      children: [
-        //Puts the video player at the top of the column
-        //and gives some padding
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: _width/1.1,
-              padding: EdgeInsets.only(top: _height/36, bottom: _height/7),
-              child: player,
-            )
-          ],
-        ),
-        //Button arrangement, when clicked calls a function from claw_movement
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTapDown: (_) => { connection!.emit('up', "") },
-              onTapUp: (_) => { connection!.emit('clear', "") },
-              child: Icon(Icons.keyboard_arrow_up_rounded, size: _buttonSize),
-            )
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTapDown: (_) => { connection!.emit('left', "") },
-              onTapUp: (_) => { connection!.emit('clear', "") },
-              child: Icon(Icons.keyboard_arrow_left_rounded, size: _buttonSize),
-            ),
-            //When the player drops the claw a play is recorded into the database
-            GestureDetector(
-              onTapDown: (_) async {
-                connection!.emit('drop', "");
-                playing = false;
-                DateTime end = DateTime.now();
-                String date = "${end.year}-${end.month}-${end.day}";
-                stopwatch.stop();
-                String playTime = "${stopwatch.elapsedMilliseconds/1000}";
-                print("Date: $date");
-                print("Playtime: $playTime");
-
-                PlayItem playItem = PlayItem(date: date, playTime: playTime);
-                //_model.insertPlay(playItem);
-                stopwatch.reset();
-
-                showDialog(context: context,
-                    barrierDismissible: false,
-                    builder: (context){
-                      return AlertDialog(
-                        title: const Text("Good try!!!"),
-                        content: const Text("Would you like to try again?"),
-                        actions: [
-                          TextButton(
-                              onPressed: (){
-                                Navigator.of(context).pop();
-                                connection!.disconnect();
-                                initSocket();
-                                connection!.connect();
-                              },
-                              child: const Text("Yes")
-                          ),
-                          // If user doesn't want to play again returns them
-                          // to the home page
-                          TextButton(
-                              onPressed: (){
-                                Navigator.of(context).pop();
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text("No")
-                          ),
-                        ],
-                      );
-                    }
-                );
-              },
-              onTapUp: (_) => { connection!.emit('clear', "") },
-              child: Icon(Icons.circle, size: _buttonSize),
-            ),
-            GestureDetector(
-              onTapDown: (_) => { connection!.emit('right', "") },
-              onTapUp: (_) => { connection!.emit('clear', "") },
-              child: Icon(Icons.keyboard_arrow_right_rounded, size: _buttonSize),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTapDown: (_) => { connection!.emit('down', "") },
-              onTapUp: (_) => { connection!.emit('clear', "") },
-              child: Icon(Icons.keyboard_arrow_down_rounded, size: _buttonSize),
-            ),
-          ],
-        ),
-        //Text box that tells the user how many people are ahead of them
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(top: _height/10),
-              child: Container(
-                width: _width/1.2,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(_width/2)
-                ),
-                child: Center(
-                  child: connected == true ? 
-                    queue != null ? 
-                          Text("You are ${queue!.indexOf(connection!.id!)} out of ${queue!.length.toString()} players!", style: TextStyle(fontSize: 20,
-                                                                              color: Colors.white)) :
-                          Text("Joining Queue...", style: TextStyle(fontSize: 20,
-                                                                    color: Colors.white)) : 
-                  Text("Disconnected!", style: TextStyle(fontSize: 20,
-                                                        color: Colors.white)),
-                )
+    return Container(
+      decoration: const BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage(
+                  'assets/images/background.jpg'
               ),
-            )
-          ],
-        )
-      ],
+              fit: BoxFit.cover
+          )
+      ),
+      child: Column(
+        children: [
+          //Puts the video player at the top of the column
+          //and gives some padding
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: _width/1.1,
+                padding: EdgeInsets.only(top: _height/36, bottom: _height/6),
+                child: player,
+              )
+            ],
+          ),
+          //Button arrangement, when clicked calls a function from claw_movement
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTapDown: (_) => { connection!.emit('up', "") },
+                onTapUp: (_) => { connection!.emit('clear', "") },
+                child: Icon(Icons.keyboard_arrow_up_rounded, size: _buttonSize, color: Colors.white,),
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTapDown: (_) => { connection!.emit('left', "") },
+                onTapUp: (_) => { connection!.emit('clear', "") },
+                child: Icon(Icons.keyboard_arrow_left_rounded, size: _buttonSize, color: Colors.white),
+              ),
+              //When the player drops the claw a play is recorded into the database
+              GestureDetector(
+                onTapDown: (_) async {
+                  connection!.emit('drop', "");
+                  playing = false;
+                  DateTime end = DateTime.now();
+                  String date = "${end.year}-${end.month}-${end.day}";
+                  stopwatch.stop();
+                  String playTime = "${stopwatch.elapsedMilliseconds/1000}";
+                  print("Date: $date");
+                  print("Playtime: $playTime");
+
+                  PlayItem playItem = PlayItem(date: date, playTime: playTime);
+                  //_model.insertPlay(playItem);
+                  stopwatch.reset();
+
+                  showDialog(context: context,
+                      barrierDismissible: false,
+                      builder: (context){
+                        return AlertDialog(
+                          title: const Text("Good try!!!"),
+                          content: const Text("Would you like to try again?"),
+                          actions: [
+                            TextButton(
+                                onPressed: (){
+                                  Navigator.of(context).pop();
+                                  connection!.disconnect();
+                                  initSocket();
+                                  connection!.connect();
+                                },
+                                child: const Text("Yes")
+                            ),
+                            // If user doesn't want to play again returns them
+                            // to the home page
+                            TextButton(
+                                onPressed: (){
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text("No")
+                            ),
+                          ],
+                        );
+                      }
+                  );
+                },
+                onTapUp: (_) => { connection!.emit('clear', "") },
+                child: Icon(Icons.circle, size: _buttonSize, color: Colors.white),
+              ),
+              GestureDetector(
+                onTapDown: (_) => { connection!.emit('right', "") },
+                onTapUp: (_) => { connection!.emit('clear', "") },
+                child: Icon(Icons.keyboard_arrow_right_rounded, size: _buttonSize, color: Colors.white),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTapDown: (_) => { connection!.emit('down', "") },
+                onTapUp: (_) => { connection!.emit('clear', "") },
+                child: Icon(Icons.keyboard_arrow_down_rounded, size: _buttonSize, color: Colors.white),
+              ),
+            ],
+          ),
+          //Text box that tells the user how many people are ahead of them
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: _height/6),
+                child: Container(
+                  width: _width/1.2,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(_width/2)
+                  ),
+                  child: Center(
+                    child: connected == true ?
+                      queue != null ?
+                            Text("You are ${queue!.indexOf(connection!.id!)} out of ${queue!.length.toString()} players!", style: TextStyle(fontSize: 20,
+                                                                                color: Colors.white)) :
+                            Text("Joining Queue...", style: TextStyle(fontSize: 20,
+                                                                      color: Colors.white)) :
+                    Text("Disconnected!", style: TextStyle(fontSize: 20,
+                                                          color: Colors.white)),
+                  )
+                ),
+              )
+            ],
+          )
+        ],
+      ),
     );
   }
 

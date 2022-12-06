@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'claw_controller.dart';
 import 'menu.dart';
-import 'my_stats.dart';
+import 'frontend/local_storage/my_stats.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

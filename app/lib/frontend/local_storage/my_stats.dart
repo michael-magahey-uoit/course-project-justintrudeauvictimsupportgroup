@@ -1,5 +1,5 @@
-import 'package:claw/play_item.dart';
-import 'package:claw/play_model.dart';
+import 'package:claw/frontend/local_storage/play_item.dart';
+import 'package:claw/frontend/local_storage/play_model.dart';
 import 'package:flutter/material.dart';
 
 class MyStats extends StatefulWidget {
