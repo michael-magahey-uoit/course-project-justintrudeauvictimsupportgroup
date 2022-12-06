@@ -18,7 +18,7 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(120, 250, 0, 0),
+        backgroundColor: const Color.fromARGB(250, 250, 140, 0),
         title: const Text('Claw Machines Locator'),
       ),
       body: Stack(
@@ -62,7 +62,7 @@ class _MapPageState extends State<MapPage> {
                             icon: Icon(
                               Icons.location_on,
                               color: selectedIndex == i
-                                  ? Colors.pink
+                                  ? Colors.orange
                                   : Colors.grey,
                             ),
                             iconSize: 50,
@@ -92,7 +92,7 @@ class _MapPageState extends State<MapPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    color: const Color.fromARGB(120, 250, 0, 0),
+                    color: const Color.fromARGB(180, 250, 140, 0),
                     child: Row(
                       children: [
                         const SizedBox(width: 10),
@@ -119,7 +119,7 @@ class _MapPageState extends State<MapPage> {
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 14,
-                                        color: Colors.white60,
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ],
