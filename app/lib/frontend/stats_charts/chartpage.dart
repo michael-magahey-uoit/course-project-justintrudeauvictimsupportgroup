@@ -6,7 +6,12 @@ import 'linechart.dart' as ch;
 import 'piechart.dart' as pi;
 
 List<double> _lineData = [];
-Map<String, double> _piData = {"this": 10};
+Map<String, double> _piData = {
+  "Nokia": 10,
+  "Apple": 102,
+  "Samsung": 23,
+  "Oneplus": 6
+};
 
 class ChartPage extends StatefulWidget {
   ChartPage({Key? key, this.data}) : super(key: key);
@@ -31,48 +36,48 @@ class _ChartPageState extends State<ChartPage> {
           children: [
             if (widget.data == 'pi') ...[
               buildPieChart(),
+            ] else if (widget.data == 'line') ...[
+              buildLineChartHard([1, 2, 4, 3, 5]),
             ] else ...[
-              buildLineChart(_lineData),
+              Text("Please Select an Option"),
             ],
           ],
         )));
   }
-}
 
-buildPieChart() {
-  getPhones();
-  return FutureBuilder(
-      future: getPhones(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        //_buildPhones(context, snapshot.data.docs[0].data()['phone_types']);
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text('Phone Types'),
-              pi.SimplePieChart(
-                seriesList: _piData,
-              )
-            ],
-          ),
-        );
-      });
-}
-
-List<double> _buildList(BuildContext context, DocumentSnapshot productData) {
-  var list = [];
-
-  for (var i = 0; i < productData.toString().length; i++) {
-    print("o");
+  buildPieChart() {
+    return FutureBuilder(
+        future: getPhones(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          //_buildPhones(context, snapshot.data.docs[0].data()['phone_types']);
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text('Phone Types'),
+                pi.SimplePieChart(
+                  seriesList: _piData,
+                )
+              ],
+            ),
+          );
+        });
   }
-  return [1];
-}
 
-_buildPhones(BuildContext context, DocumentSnapshot productData) {
-  var phones =
-      Phones.fromMap(productData.data(), reference: productData.reference);
-  print(phones);
-}
+  List<double> _buildList(BuildContext context, DocumentSnapshot productData) {
+    var list = [];
+
+    for (var i = 0; i < productData.toString().length; i++) {
+      print("o");
+    }
+    return [1];
+  }
+
+  _buildPhones(BuildContext context, DocumentSnapshot productData) {
+    var phones =
+        Phones.fromMap(productData.data(), reference: productData.reference);
+    print(phones);
+  }
 
 /*buildLineChart(List<double> data) {
   return FutureBuilder(
@@ -95,57 +100,70 @@ _buildPhones(BuildContext context, DocumentSnapshot productData) {
         );
       });}*/
 
-buildLineChart(List<double> data) {
-  return FutureBuilder(
-      future: getPlaytimes(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        print("Snapshot: $snapshot");
-        if (!snapshot.hasData) {
-          print("Data is missing");
-          return CircularProgressIndicator();
-        } else {
-          print("Data found");
-          print("Length: ${snapshot.data.docs.length}");
-          Color _color = Colors.white;
-          return ListView.builder(
-            itemCount: snapshot.data.docs.length,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {},
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
+  buildLineChart(List<double> data) {
+    return FutureBuilder(
+        future: getPlaytimes(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          print("Snapshot: $snapshot");
+          if (!snapshot.hasData) {
+            print("Data is missing");
+            return CircularProgressIndicator();
+          } else {
+            print("Data found");
+            print("Length: ${snapshot.data.docs.length}");
+            Color _color = Colors.white;
+            return ListView.builder(
+              itemCount: snapshot.data.docs.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                    ),
+                    child: ListTile(
+                      title: Text(snapshot.data.docs[index].data()["time"]),
+                    ),
                   ),
-                  child: ListTile(
-                    title: Text(snapshot.data.docs[index].data()["time"]),
-                  ),
-                ),
-              );
-            },
-          );
-        }
+                );
+              },
+            );
+          }
+        });
+  }
+
+  buildLineChartHard(List<double> data) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text('Play Times'),
+          ch.SimpleLineChart(
+            seriesList: [1, 2, 4, 3, 5, 3],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future getPlaytimes() async {
+    print("Getting the playtimes...");
+    var temp = await FirebaseFirestore.instance.collection('play_times').get();
+    FirebaseFirestore.instance.collection('play_times').get().then((value) {
+      value.docs.forEach((element) {
+        print(element.data()["time"]);
       });
-}
-
-Future getPlaytimes() async {
-  print("Getting the playtimes...");
-  var temp = await FirebaseFirestore.instance.collection('play_times').get();
-  FirebaseFirestore.instance.collection('play_times').get().then((value) {
-    value.docs.forEach((element) {
-      print(element.data()["time"]);
     });
-  });
-  return temp;
-}
+    return temp;
+  }
 
-Future getPhones() async {
-  print("Getting the phones...");
-  FirebaseFirestore.instance.collection('phones').get().then((value) {
-    value.docs.forEach((element) {
-      print("urm om");
-      print(element.data()["nokia"]);
+  Future getPhones() async {
+    print("Getting the phones...");
+    FirebaseFirestore.instance.collection('phones').get().then((value) {
+      value.docs.forEach((element) {
+        print(element.data()["nokia"]);
+      });
     });
-    print("ur dad");
-  });
-  return await FirebaseFirestore.instance.collection('phones').get();
+    return await FirebaseFirestore.instance.collection('phones').get();
+  }
 }
