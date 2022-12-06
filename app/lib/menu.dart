@@ -47,8 +47,16 @@ class _MainMenuState extends State<MainMenu> {
       ),
       child: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Container(
+              padding: const EdgeInsets.only(bottom: 60, top: 80),
+              child: const Text(
+                "Claw City",
+                style: TextStyle(
+                    fontSize: 60,
+                    fontFamily: 'ZenDots'),
+              ),
+            ),
             //Button to bring the user to the claw machine controller
             GestureDetector(
               onTap: () {
