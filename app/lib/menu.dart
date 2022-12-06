@@ -111,7 +111,7 @@ class _MainMenuState extends State<MainMenu> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
-                  Icon(Icons.location_city_outlined),
+                  Icon(Icons.map),
                   Text("CM Location", style: TextStyle(fontSize: 40))
                 ],
               ),
