@@ -8,8 +8,6 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'dart:convert';
 import 'dart:io';
 
-import 'claw_movement.dart';
-
 class ClawController extends StatefulWidget {
   ClawController({Key? key, this.title}) : super(key: key);
 
@@ -26,7 +24,6 @@ class _ClawControllerState extends State<ClawController> {
   IO.Socket? connection = null;
   bool connected = false;
   bool playing = false;
-  final _claw = ClawMovement();
   final _model = PlayModel();
   final stopwatch = Stopwatch();
 
@@ -207,8 +204,36 @@ class _ClawControllerState extends State<ClawController> {
                 print("Playtime: $playTime");
 
                 PlayItem playItem = PlayItem(date: date, playTime: playTime);
-                _model.insertPlay(playItem);
+                //_model.insertPlay(playItem);
                 stopwatch.reset();
+
+                print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                showDialog(context: context,
+                    barrierDismissible: false,
+                    builder: (context){
+                      return AlertDialog(
+                        title: const Text("Good try!!!"),
+                        content: const Text("Would you like to try again?"),
+                        actions: [
+                          TextButton(
+                              onPressed: (){
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text("Yes")
+                          ),
+                          // If user doesn't want to play again returns them
+                          // to the home page
+                          TextButton(
+                              onPressed: (){
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text("No")
+                          ),
+                        ],
+                      );
+                    }
+                );
               },
               onTapUp: (_) => { connection!.emit('clear', "") },
               child: Icon(Icons.circle, size: _buttonSize),
