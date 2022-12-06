@@ -6,7 +6,7 @@ let UP = new gpio(24, 'out');
 let DOWN = new gpio(5, 'out');
 let LEFT = new gpio(27, 'out');
 let RIGHT = new gpio(25, 'out');
-let DROP = new gpio(8, 'out'); //Incorrect GPIO cause of weird network bug
+let DROP = new gpio(26, 'out'); //Incorrect GPIO cause of weird network bug
 console.log(`GPIO Setup Complete!`);
 
 //Simple force sleep function
@@ -35,7 +35,6 @@ const bodyParser = require('body-parser');
 const uuid = require('uuid');
 const cors = require('cors');
 const fs = require('fs');
-//const firebase = require('firebase-admin');
 const app = express()
 const https = require('https');
 const http = require('http'); //http is only for outbound api calls and should NEVER handle any client server data
@@ -94,11 +93,11 @@ wss.on('connection', async (ws) => {
     //We need this incase the queue is empty, because if its empty, we have to send the status
     //before entering our wait loop, but player is only set after the wait, so we have to use
     //the queue if its empty.
-    if (queue[0] == socket.id)
+    if (queue[0] == ws.id)
     {
-        socket.emit('queue', JSON.stringify({ status: queue, current: queue[0] }));
+        ws.emit('queue', JSON.stringify({ status: queue, current: queue[0] }));
     }
-    else { socket.emit('queue', JSON.stringify({ status: queue, current: player })); }
+    else { ws.emit('queue', JSON.stringify({ status: queue, current: player })); }
     console.log(`[${ws.id}] - New Client ${ws.id}!`);
     while (queue[0] != ws.id)
     {
@@ -158,11 +157,11 @@ insecure_wss.on('connection', async (ws) => {
     //We need this incase the queue is empty, because if its empty, we have to send the status
     //before entering our wait loop, but player is only set after the wait, so we have to use
     //the queue if its empty.
-    if (queue[0] == socket.id)
+    if (queue[0] == ws.id)
     {
-        socket.emit('queue', JSON.stringify({ status: queue, current: queue[0] }));
+        ws.emit('queue', JSON.stringify({ status: queue, current: queue[0] }));
     }
-    else { socket.emit('queue', JSON.stringify({ status: queue, current: player })); }
+    else { ws.emit('queue', JSON.stringify({ status: queue, current: player })); }
     console.log(`[${ws.id}] - New Client ${ws.id}!`);
     while (queue[0] != ws.id)
     {
