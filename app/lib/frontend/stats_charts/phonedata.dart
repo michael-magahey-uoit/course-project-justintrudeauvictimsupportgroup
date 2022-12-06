@@ -22,3 +22,12 @@ class Phones {
     };
   }
 }
+
+class ChartData {
+  ChartData({this.xValue, this.yValue});
+  ChartData.fromMap(Map<String, dynamic> dataMap)
+      : xValue = dataMap['x'],
+        yValue = dataMap['y'];
+  final Timestamp? xValue;
+  final int? yValue;
+}

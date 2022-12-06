@@ -57,7 +57,9 @@ class _ChartPageState extends State<ChartPage> {
                   children: <Widget>[
                     Text('Phone Types'),
                     pi.SimplePieChart(
-                      seriesList: _piData,
+                      seriesList: snapshot.data.docs.map((document) =>
+                          _buildPhones(context, document)
+                              as Map<String, double>),
                     )
                   ],
                 ),
@@ -65,25 +67,28 @@ class _ChartPageState extends State<ChartPage> {
             }));
   }
 
-  List<double> _buildList(BuildContext context, DocumentSnapshot productData) {
-    var list = [];
-
-    for (var i = 0; i < productData.toString().length; i++) {
-      print("o");
-    }
-    return [1];
-  }
-
   _buildPhones(BuildContext context, DocumentSnapshot productData) {
     var phones =
         Phones.fromMap(productData.data(), reference: productData.reference);
-    print(phones);
+    print("building phones $phones");
+  }
+
+  Future getPlaytimes() async {
+    print("Getting the playtimes...");
+    var temp = await FirebaseFirestore.instance.collection('play_times').get();
+    FirebaseFirestore.instance.collection('play_times').get().then((value) {
+      value.docs.forEach((element) {
+        print(element.data()["time"]);
+      });
+    });
+    return temp;
   }
 
   buildLineChart(List<double> data) {
+/*
     return FutureBuilder(
-        future: getPlaytimes(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
+        future: getPlayTimes(), 
+          builder: (BuildContext context, AsyncSnapshot snapshot) { 
           if (!snapshot.hasData) {
             return Text("Loading");
           }
@@ -100,6 +105,7 @@ class _ChartPageState extends State<ChartPage> {
             ),
           );
         });
+  }*/
   }
 
   buildLineChartHard(List<double> data) {
@@ -114,17 +120,6 @@ class _ChartPageState extends State<ChartPage> {
         ],
       ),
     );
-  }
-
-  Future getPlaytimes() async {
-    print("Getting the playtimes...");
-    var temp = await FirebaseFirestore.instance.collection('play_times').get();
-    FirebaseFirestore.instance.collection('play_times').get().then((value) {
-      value.docs.forEach((element) {
-        print(element.data()["time"]);
-      });
-    });
-    return temp;
   }
 
   Future getPhones() async {
