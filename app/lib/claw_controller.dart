@@ -5,6 +5,7 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:unique_identifier/unique_identifier.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -62,32 +63,35 @@ class _ClawControllerState extends State<ClawController> {
         case "android":
           {
             AndroidDeviceInfo androidDevice = await deviceInfo.androidInfo;
-            print(androidDevice.toMap());
+            String? imei = await UniqueIdentifier.serial;
+            print("${androidDevice.device} - ${imei != null ? imei : ""}");
             //These prints will eventually be sent to firebase
           }
           break;
         case "ios":
           {
             IosDeviceInfo iosDevice = await deviceInfo.iosInfo;
-            print(iosDevice.toMap());
+            print(iosDevice.name);
+            //These wont be pushed because we have no way to test all the platforms. If we could, we would build OS version/brand variables for all
+            //Platforms then send to firebase.
           }
           break;
         case "windows":
           {
             WindowsDeviceInfo windowsDevice = await deviceInfo.windowsInfo;
-            print(windowsDevice.toMap());
+            print(windowsDevice.editionId);
           }
           break;
         case "macos":
           {
             MacOsDeviceInfo macosDevice = await deviceInfo.macOsInfo;
-            print(macosDevice.toMap());
+            print(macosDevice.osRelease);
           }
           break;
         case "linux":
           {
             LinuxDeviceInfo linuxDevice = await deviceInfo.linuxInfo;
-            print(linuxDevice.toMap());
+            print(linuxDevice.variant);
           }
           break;
       }
@@ -207,7 +211,6 @@ class _ClawControllerState extends State<ClawController> {
                 //_model.insertPlay(playItem);
                 stopwatch.reset();
 
-                print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 showDialog(context: context,
                     barrierDismissible: false,
                     builder: (context){
@@ -218,6 +221,9 @@ class _ClawControllerState extends State<ClawController> {
                           TextButton(
                               onPressed: (){
                                 Navigator.of(context).pop();
+                                connection!.disconnect();
+                                initSocket();
+                                connection!.connect();
                               },
                               child: const Text("Yes")
                           ),
