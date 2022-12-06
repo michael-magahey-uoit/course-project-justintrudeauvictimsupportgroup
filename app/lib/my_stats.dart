@@ -32,6 +32,9 @@ class _MyStatsState extends State<MyStats> {
       appBar: AppBar(
         title: Text(widget.title!),
         actions: [
+          //A button that when pressed brings up a date picker that allows
+          //the user to pick a date they want to filter the results they see
+          //in the datatable to.
           IconButton(
               onPressed: (){
                 showDatePicker(
@@ -55,9 +58,14 @@ class _MyStatsState extends State<MyStats> {
               icon: const Icon(Icons.sort),
               tooltip: "Choose a date to filter by.",
           ),
+          //Simple button that clears the filter set by the user
           IconButton(
               onPressed: (){
                 _filter = false;
+                getPlays();
+                setState(() {
+                  _plays;
+                });
               },
               icon: const Icon(Icons.format_clear),
               tooltip: "Clear the date filter.",
@@ -68,12 +76,14 @@ class _MyStatsState extends State<MyStats> {
     );
   }
 
+  //Sets the list of plays to be all plays in the local database
+  //if no filter is active, if there is a filter only
+  //adds the plays that match the filtered date
   Future getPlays() async{
     List allPlays = await _model.getAllPlays();
     if(_filter == true){
       _plays = [];
       for(PlayItem play in allPlays){
-        print("1.${play.date}  2.$_dateFilter");
         if(play.date == _dateFilter){
           _plays?.add(play);
         }
@@ -84,35 +94,44 @@ class _MyStatsState extends State<MyStats> {
     }
   }
 
+  //Checks if the datatable is ready to build
   Future<bool> buildReady() async{
     await getPlays();
     return true;
   }
 
+  //Returns a datatable that shows the day the user played as well
+  //as how long they played for
   Widget _buildStatsTable(){
     return FutureBuilder(
         future: buildReady(),
         builder: (context, snapshot){
           if(snapshot.hasData){
             return Row(
-              children: 
+              children:
               [
                 Expanded(
                   child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: DataTable(
                     columns: const [
-                      DataColumn(label: Text("Date")),
-                      DataColumn(label: Text("Play Time (s)"))
+                      DataColumn(
+                          label: Text("Date", style: TextStyle(fontSize: 20)),
+                        tooltip: "Date played"
+                      ),
+                      DataColumn(
+                          label: Text("Play Time (s)", style: TextStyle(fontSize: 20)),
+                        tooltip: "Time played for in seconds"
+                      )
                     ],
                     rows: _plays!.map(
                             (play) => DataRow(
                             cells: <DataCell>[
                               DataCell(
-                                  Text(play.date!)
+                                  Text(play.date!, style: const TextStyle(fontSize: 20))
                               ),
                               DataCell(
-                                  Text(play.playTime!)
+                                  Text(play.playTime!, style: const TextStyle(fontSize: 20))
                               ),
                             ]
                         )
@@ -123,6 +142,7 @@ class _MyStatsState extends State<MyStats> {
             ]
             );
           }
+          //If the data table isn't ready display a leading icon
           return const SizedBox(
             height: 200,
             width: 200,

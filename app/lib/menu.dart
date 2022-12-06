@@ -48,7 +48,7 @@ class _MainMenuState extends State<MainMenu> {
             child: Container(
               color: Colors.red,
               width: _width / 1.5,
-              height: _height / 16,
+              height: _height / 12,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
@@ -67,7 +67,7 @@ class _MainMenuState extends State<MainMenu> {
             child: Container(
               color: Colors.yellow,
               width: _width / 1.5,
-              height: _height / 16,
+              height: _height / 12,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
@@ -87,7 +87,7 @@ class _MainMenuState extends State<MainMenu> {
             child: Container(
               color: Colors.blue,
               width: _width / 1.5,
-              height: _height / 16,
+              height: _height / 12,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
@@ -107,7 +107,7 @@ class _MainMenuState extends State<MainMenu> {
             child: Container(
               color: const Color.fromARGB(120, 250, 0, 0),
               width: _width / 1.5,
-              height: _height / 16,
+              height: _height / 12,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
@@ -117,6 +117,7 @@ class _MainMenuState extends State<MainMenu> {
               ),
             ),
           ),
+          const Padding(padding: EdgeInsets.only(bottom: 40))
         ],
       ),
     );
