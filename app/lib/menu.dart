@@ -40,8 +40,8 @@ class _MainMenuState extends State<MainMenu> {
       //Background image for the app
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage(
-              'assets/images/background.jpg'
+          image: NetworkImage(
+              'https://wallpapercave.com/wp/wp4694506.jpg'
           ),
           fit: BoxFit.cover
         )
