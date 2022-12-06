@@ -33,7 +33,7 @@ dependencies:
     sdk: flutter
 
   youtube_player_flutter: ^8.0.0
-  sqflite: 
+  sqflite:
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -50,7 +50,7 @@ dependencies:
   geocoding:
   geolocator:
   firebase_core: ^2.3.0
-  cloud_firestore: 
+  cloud_firestore:
   device_info_plus:
 
 
@@ -75,6 +75,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:
