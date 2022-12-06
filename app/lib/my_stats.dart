@@ -18,6 +18,11 @@ class _MyStatsState extends State<MyStats> {
   bool _filter = false;
   String? _dateFilter;
   int? _sortColumnIndex;
+  var snackBar = const SnackBar(
+    content: Text("Filter Cleared.",
+      style: TextStyle(fontSize: 20),
+    ),
+  );
 
   @override
   void initState(){
@@ -61,6 +66,7 @@ class _MyStatsState extends State<MyStats> {
           //Simple button that clears the filter set by the user
           IconButton(
               onPressed: (){
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 _filter = false;
                 getPlays();
                 setState(() {

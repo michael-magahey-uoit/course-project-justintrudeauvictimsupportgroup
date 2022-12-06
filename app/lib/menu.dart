@@ -37,6 +37,7 @@ class _MainMenuState extends State<MainMenu> {
     double _height = MediaQuery.of(context).size.height; //Height of device
     TextStyle _textSize = TextStyle(fontSize: 40);
     return Container(
+      //Background image for the app
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage(
@@ -63,9 +64,12 @@ class _MainMenuState extends State<MainMenu> {
                 Navigator.pushNamed(context, '/playClaw');
               },
               child: Container(
-                color: Colors.red,
                 width: _width / 1.5,
                 height: _height / 12,
+                decoration: const BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.all(Radius.circular(20))
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
@@ -82,13 +86,16 @@ class _MainMenuState extends State<MainMenu> {
                 Navigator.pushNamed(context, '/myStats');
               },
               child: Container(
-                color: Colors.yellow,
                 width: _width / 1.5,
                 height: _height / 12,
+                decoration: const BoxDecoration(
+                    color: Colors.yellow,
+                    borderRadius: BorderRadius.all(Radius.circular(20))
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
-                    Icon(Icons.insert_chart),
+                    Icon(Icons.history, size: 30,),
                     Text("Play History", style: TextStyle(fontSize: 40))
                   ],
                 ),
@@ -102,9 +109,12 @@ class _MainMenuState extends State<MainMenu> {
                     MaterialPageRoute(builder: (context) => chart.ChartMenu()));
               },
               child: Container(
-                color: Colors.blue,
                 width: _width / 1.5,
                 height: _height / 12,
+                decoration: const BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(Radius.circular(20))
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
@@ -122,9 +132,12 @@ class _MainMenuState extends State<MainMenu> {
                     MaterialPageRoute(builder: (context) => map_maker.MapPage()));
               },
               child: Container(
-                color: const Color.fromARGB(120, 250, 0, 0),
                 width: _width / 1.5,
                 height: _height / 12,
+                decoration: const BoxDecoration(
+                    color: Colors.purple,
+                    borderRadius: BorderRadius.all(Radius.circular(20))
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
