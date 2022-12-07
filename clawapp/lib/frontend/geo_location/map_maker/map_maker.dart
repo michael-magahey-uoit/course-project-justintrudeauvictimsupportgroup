@@ -1,24 +1,28 @@
-import 'package:claw/frontend/geo_location/location_page/locations_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'constants.dart';
 import 'mapMarkers.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:latlong2/latlong.dart';
 
-Future<String> fetchAlbum() async {
-  final response = await http.get(Uri.parse('http://10.0.2.2:80/location'));
+// Future<IP> fetchAlbum() async {
+//   final response = await http.get(Uri.parse('http://10.0.2.2:80/location'));
+//
+//   // Appropriate action depending upon the
+//   // server response
+//   if (response.statusCode == 200) {
+//     return IP.fromJson(json.decode(response.body));
+//   } else {
+//     throw Exception('Failed to load album');
+//   }
+// }
 
-  // Appropriate action depending upon the
-  // server response
-  if (response.statusCode == 200) {
-    return jsonDecode(response.body)['ip'];
-  } else {
-    throw Exception('Failed to load album');
-  }
-}
-
+// class IP {
+// }
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -27,33 +31,70 @@ class MapPage extends StatefulWidget {
   State<MapPage> createState() => _MapPageState();
 }
 
-class _MapPageState extends State<MapPage> {
-
+class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
   final pageController = PageController();
   int selectedIndex = 0;
+  List<MapMarker> locations = [];
+  late MapController mapController;
+  late Position currPosition;
+  var currentLocation = AppConstants.myLocation;
+
+  //create a function to randomly change locations
+  randomLocationsChange(LatLng newMark) {
+    mapController.move(newMark, 15);
+  }
+
+  //initialize map controller and the initialstate
+  @override
+  void initState() {
+    super.initState();
+    mapController = MapController();
+  }
 
   @override
   Widget build(BuildContext context) {
+    //call for geolocation tracking
+    Geolocator.isLocationServiceEnabled().then((value) => null);
+    Geolocator.requestPermission().then((value) => null);
+    Geolocator.checkPermission().then((LocationPermission permission) {
+      //output to console
+      print("Location permission: $permission");
+    });
+
+    //output the map look and tracking functions
+    return Scaffold(
+      //call the function which generates a map
+      body: generateMap(),
+      floatingActionButton: FloatingActionButton(
+        foregroundColor: Colors.orange,
+        backgroundColor: Colors.orange,
+        onPressed: () {
+          //call the function that grabs the addresses
+          getAddress();
+        },
+        child: const Icon(
+          Icons.add_location,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+
+  Widget generateMap() {
+    List<LatLng> trackers = [];
+
+    //call for geolocation tracking
+    Geolocator.isLocationServiceEnabled().then((value) => null);
+    Geolocator.requestPermission().then((value) => null);
+    Geolocator.checkPermission().then((LocationPermission permission) {
+      //output to console
+      print("Location permission: $permission");
+    });
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(250, 250, 140, 0),
         title: const Text('Claw Machines Locator'),
-        actions: [
-          IconButton(
-            tooltip: "Get Your Current Location",
-              onPressed: () async{
-                MapMarker currLocation = await Navigator.pushNamed(context, '/getLocation') as MapMarker;
-
-                //add current marker to map marker
-                //mapMarkers.add(MapMarker(image: currLocation.image, title: currLocation.title, address: currLocation.address, location: currLocation.location));
-                print(currLocation.title);
-                print(currLocation.address);
-                print(currLocation.location);
-              },
-              icon: const Icon(Icons.location_searching)
-          )
-        ],
-
       ),
       body: Stack(
         children: [
@@ -67,7 +108,7 @@ class _MapPageState extends State<MapPage> {
             layers: [
               TileLayerOptions(
                 urlTemplate:
-                'https://api.mapbox.com/styles/v1/haarisahmed/clabxwqi8002j15nsc4fpay2x/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiaGFhcmlzYWhtZWQiLCJhIjoiY2xhYnhmc2I0MDR4MjNycGUzaHl5ZmQ3YSJ9.wP2USfn6Uhyto8qnogGhuQ',
+                    'https://api.mapbox.com/styles/v1/haarisahmed/clabxwqi8002j15nsc4fpay2x/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiaGFhcmlzYWhtZWQiLCJhIjoiY2xhYnhmc2I0MDR4MjNycGUzaHl5ZmQ3YSJ9.wP2USfn6Uhyto8qnogGhuQ',
                 additionalOptions: {
                   'mapStyleId': AppConstants.mapBoxStyleId,
                   'accessToken': AppConstants.mapBoxAccessToken,
@@ -91,6 +132,7 @@ class _MapPageState extends State<MapPage> {
                                   curve: Curves.easeInOut,
                                 );
                                 selectedIndex = i;
+                                currentLocation = mapMarkers[i].location!;
                               });
                             },
                             icon: Icon(
@@ -111,14 +153,20 @@ class _MapPageState extends State<MapPage> {
           Positioned(
             left: 0,
             right: 0,
-            bottom: 2,
+            bottom: 60,
             height: MediaQuery.of(context).size.height * 0.3,
             child: PageView.builder(
               controller: pageController,
-              onPageChanged: (value) {},
               itemCount: mapMarkers.length,
-              itemBuilder: (_, index) {
-                final item = mapMarkers[index];
+              onPageChanged: (value) {
+                setState(() {
+                  selectedIndex = value;
+                  currentLocation = mapMarkers[value].location!;
+                  _animatedMapMove(currentLocation, 11.5);
+                });
+              },
+              itemBuilder: (context, index) {
+                var item = mapMarkers[index];
                 return Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Card(
@@ -184,5 +232,72 @@ class _MapPageState extends State<MapPage> {
         ],
       ),
     );
+  }
+
+  getAddress() async {
+    //create a variable to grab the current position
+    Position currPos = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    print(currPos);
+
+    //create a main list that will be the locations where the markers are placed
+    final List<Placemark> marks =
+        await placemarkFromCoordinates(currPos.latitude, currPos.longitude);
+
+    //get a new position
+    LatLng newMark = LatLng(currPos.latitude, currPos.longitude);
+
+    //new places will be at the beginning
+    MapMarker newArea = MapMarker(
+        image: 'person.jpg',
+        title: 'Your Location',
+        address: "${marks[0].subThoroughfare} ${marks[0].thoroughfare}",
+        location: newMark);
+
+    //create a set state to show new information
+    setState(() {
+      //add a location to the map
+      mapMarkers.add(newArea);
+    });
+
+    //call random locations function
+    randomLocationsChange(newMark);
+
+    print('${newArea}');
+  }
+
+  void _animatedMapMove(LatLng destLocation, double destZoom) {
+    // Create some tweens. These serve to split up the transition from one location to another.
+    // In our case, we want to split the transition be<tween> our current map center and the destination.
+    final latTween = Tween<double>(
+        begin: mapController.center.latitude, end: destLocation.latitude);
+    final lngTween = Tween<double>(
+        begin: mapController.center.longitude, end: destLocation.longitude);
+    final zoomTween = Tween<double>(begin: mapController.zoom, end: destZoom);
+
+    // Create a animation controller that has a duration and a TickerProvider.
+    var controller = AnimationController(
+        duration: const Duration(milliseconds: 1000), vsync: this);
+    // The animation determines what path the animation will take. You can try different Curves values, although I found
+    // fastOutSlowIn to be my favorite.
+    Animation<double> animation =
+        CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn);
+
+    controller.addListener(() {
+      mapController.move(
+        LatLng(latTween.evaluate(animation), lngTween.evaluate(animation)),
+        zoomTween.evaluate(animation),
+      );
+    });
+
+    animation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        controller.dispose();
+      } else if (status == AnimationStatus.dismissed) {
+        controller.dispose();
+      }
+    });
+
+    controller.forward();
   }
 }
