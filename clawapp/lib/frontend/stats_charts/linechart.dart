@@ -9,7 +9,6 @@ class SimpleLineChart extends StatelessWidget {
 
   SimpleLineChart({this.seriesList, this.modelList, this.animate});
 
-  /// Creates a [LineChart] with sample data and no transition.
   @override
   Widget build(BuildContext context) {
     //currently hardcoded; should be read thru JSON
@@ -25,7 +24,6 @@ class SimpleLineChart extends StatelessWidget {
     );
   }
 
-  /// Create one series with sample hard coded data.
   static List<LineChartModel> _convertData(List<double> nums) {
     List<LineChartModel> data = [];
     for (double i in nums) {

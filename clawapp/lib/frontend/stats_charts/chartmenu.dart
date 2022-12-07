@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'chartpage.dart' as chart;
 
 class ChartMenu extends StatefulWidget {
-  ChartMenu({Key? key, this.data}) : super(key: key);
-  String? data;
+  /**
+   * Builds the screen to display chart based on nav bar
+   */
+  ChartMenu({Key? key}) : super(key: key);
 
   @override
   State<ChartMenu> createState() => _ChartMenuState();

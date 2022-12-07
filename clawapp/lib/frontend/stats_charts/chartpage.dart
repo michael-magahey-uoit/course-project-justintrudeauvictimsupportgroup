@@ -14,6 +14,10 @@ Map<String, double> _piData = {
 };
 
 class ChartPage extends StatefulWidget {
+  /**
+   * Connects to firebase, builds charts from data
+   * Contains futurebuilders for both charts
+   */
   ChartPage({Key? key, this.data}) : super(key: key);
   String? data;
 
@@ -77,6 +81,7 @@ class _ChartPageState extends State<ChartPage> {
             }));
   }
 
+  //retriever functions for firebase data
   _buildPhones(BuildContext context, DocumentSnapshot productData) {
     print("building phones ${productData.data()}");
     var phones =
@@ -149,24 +154,8 @@ class _ChartPageState extends State<ChartPage> {
 
   Future getPhones() async {
     print("Getting the phones...");
-    /*
-    var docRef = FirebaseFirestore.instance.collection("phones").doc("ez");
-    docRef.get().then(
-      (DocumentSnapshot doc) {
-        final data = doc.data() as Map<String, dynamic>;
-        print("ez $data");
-      },
-      onError: (e) => print("Error getting document: $e"),
-    );*/
     //problem is this returns 0 length
-    FirebaseFirestore.instance.collection('phones').get().then((value) {
-      if (value.docs == null) {
-        print('LENGTH IS 0 datanotgot');
-      }
-      value.docs.forEach((element) {
-        print(element.data()["nokia"]);
-      });
-    });
+
     return await FirebaseFirestore.instance.collection('phones').get();
   }
 }
