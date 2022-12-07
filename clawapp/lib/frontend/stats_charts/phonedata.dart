@@ -1,5 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/**
+ * Classes for data from firebase
+ * to be used for pie and line charts
+ */
 class Phones {
   String? name;
   double? num;
