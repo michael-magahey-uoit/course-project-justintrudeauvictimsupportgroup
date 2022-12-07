@@ -17,6 +17,8 @@ This group project is designed for you to demonstrate the skills that you have l
 
 _**Note:**  Any projects from individual students will not be accepted, except if special permission has been given by the instructor in advance._
 
+**Note:**   Please test with clawapp and fake_backend, as app is depreciated and backend requires GPIO libraries only available on Raspberry Pi's
+
 ## Detailed Instructions
 
 ### Choosing a Topic

@@ -191,11 +191,12 @@ insecure_wss.on('connection', async (ws) => {
     });
     ws.on('drop', async () => {
         DROP.writeSync(1);
+        player = undefined
         console.log(`[${ws.id}] - Dropped Claw! Game Over!`);
         await sleep(1000);
+        queue.splice(0, 1);
         DROP.writeSync(0);
         ws.disconnect();
-        queue.splice(0, 1);
     });
     ws.on('disconnect', async () => {
         if (ws.id == player)
@@ -210,7 +211,10 @@ insecure_wss.on('connection', async (ws) => {
         else
         {
             console.log(`[${ws.id}] - Player Disconnected!`);
-            queue.splice(queue.indexOf(ws.id), 1);
+            if (queue.contains(ws.id))
+            {
+                queue.splice(queue.indexOf(ws.id), 1);
+            }
         }
     });
     ws.emit('status', "play");

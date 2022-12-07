@@ -52,7 +52,7 @@ class _ClawControllerState extends State<ClawController> {
 
   //Initializes the connection to the backend webserver
   initSocket() {
-    IO.Socket socket = IO.io('http://3f7c7f6e26bc9a.lhr.life',
+    IO.Socket socket = IO.io('http://efc88c662ff438.lhr.life',
       OptionBuilder()
               .setTransports(['websocket'])
               .build()); //Change this to internet later, 10.0.2.2 = host's localhost for emulator
